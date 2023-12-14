@@ -20,6 +20,8 @@ void init(double u[N][N], double v[N][N]){
 void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 	double lapu, lapv;
 	int up, down, left, right;
+	omp_set_num_threads(128);
+	#pragma omp parrallel for collapse(2)
 	for (int i = 0; i < N; i++){
 		for (int j = 0; j < N; j++){
 			if (i == 0){
