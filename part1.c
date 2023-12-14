@@ -77,6 +77,8 @@ double norm(double x[N][N]){
 
 int main(int argc, char** argv){
 	
+	omp_set_num_threads(128);
+
 	double t = 0.0, nrmu, nrmv;
 	double u[N][N], v[N][N], du[N][N], dv[N][N];
 	
