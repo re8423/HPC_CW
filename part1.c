@@ -17,7 +17,7 @@ void init(double u[N][N], double v[N][N]){
 	#pragma omp parallel for collapse(2) schedule(dynamic)
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
-            #pragma omp simd aligned(u, v: 16)
+            #pragma omp simd aligned(u, v: 32)
             for (int k = 0; k < 1; k++) {
                 u[i][j] = ulo + (uhi - ulo) * 0.5 * (1.0 + tanh((i - N / 2) / 16.0));
                 v[i][j] = vlo + (vhi - vlo) * 0.5 * (1.0 + tanh((j - N / 2) / 16.0));
