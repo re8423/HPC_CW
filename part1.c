@@ -8,14 +8,23 @@ void init(double u[N][N], double v[N][N]){
 	uhi = 0.5; ulo = -0.5; vhi = 0.1; vlo = -0.1;
 
 	// #pragma omp parrallel for collapse(2) schedule(static, 128)
-	#pragma omp parallel for collapse(2) schedule(dynamic) simd
-	for (int i=0; i < N; i++){
-		#pragma omp simd aligned(u, v: ALIGNMENT)
-		for (int j=0; j < N; j++){
-			u[i][j] = ulo + (uhi-ulo)*0.5*(1.0 + tanh((i-N/2)/16.0));
-			v[i][j] = vlo + (vhi-vlo)*0.5*(1.0 + tanh((j-N/2)/16.0));
-		}
-	}
+	// for (int i=0; i < N; i++){
+	// 	for (int j=0; j < N; j++){
+	// 		u[i][j] = ulo + (uhi-ulo)*0.5*(1.0 + tanh((i-N/2)/16.0));
+	// 		v[i][j] = vlo + (vhi-vlo)*0.5*(1.0 + tanh((j-N/2)/16.0));
+	// 	}
+	// }
+	#pragma omp parallel
+    {
+        #pragma omp for collapse(2) schedule(dynamic) nowait
+        for (int i = 0; i < N; i++) {
+            #pragma omp simd aligned(u, v: ALIGNMENT)
+            for (int j = 0; j < N; j++) {
+                u[i][j] = ulo + (uhi - ulo) * 0.5 * (1.0 + tanh((i - N / 2) / 16.0));
+                v[i][j] = vlo + (vhi - vlo) * 0.5 * (1.0 + tanh((j - N / 2) / 16.0));
+            }
+        }
+    }
 }
 
 void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
