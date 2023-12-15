@@ -7,7 +7,7 @@ void init(double u[N][N], double v[N][N]){
 	double uhi, ulo, vhi, vlo;
 	uhi = 0.5; ulo = -0.5; vhi = 0.1; vlo = -0.1;
 
-	#pragma omp parrallel for collapse(2) schedule(static, 128) shared(u, v) //128 is grain size
+	#pragma omp parrallel for collapse(2) schedule(dynamic) shared(u, v) //128 is grain size
 	for (int i=0; i < N; i++){
 		for (int j=0; j < N; j++){
 			u[i][j] = ulo + (uhi-ulo)*0.5*(1.0 + tanh((i-N/2)/16.0));
