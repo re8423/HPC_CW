@@ -34,7 +34,7 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 				for (j = 0; j < N; j++){
 					#pragma omp task default(shared)
 					{
-						#pragma omp task
+						#pragma omp task default(shared)
 						{
 							if (i == 0){
 								down = i;
@@ -43,7 +43,7 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 								down = i-1;
 							}
 						}
-						#pragma omp task
+						#pragma omp task default(shared)
 						{
 							if (i == N-1){
 								up = i;
@@ -52,7 +52,7 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 								up = i+1;
 							}
 						}
-						#pragma omp task
+						#pragma omp task default(shared)
 						{
 							if (j == 0){
 								left = j;
@@ -60,8 +60,8 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 							else{
 								left = j-1;
 							}
-						}
-						#pragma omp task
+						} 
+						#pragma omp task default(shared)
 						{
 							if (j == N-1){
 								right = j;
