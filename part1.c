@@ -65,24 +65,24 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 }
 
 void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
-	// #pragma omp parrallel
-	// {
-	// 	#pragma omp for schedule(static, 64) //64 seems to work best, why?
-	// 		for (int i = 0; i < N; i++){
-	// 			for (int j = 0; j < N; j++){
-	// 				u[i][j] += dt*du[i][j];
-	// 				v[i][j] += dt*dv[i][j];
-	// 			}
-	// 		}
-	// }
-
-	for (int i = 0; i < N; i++){
-		#pragma omp parallel  for
-		for (int j = 0; j < N; j++){
-			u[i][j] += dt*du[i][j];
-			v[i][j] += dt*dv[i][j];
-		}
+	#pragma omp parrallel
+	{
+		#pragma omp for schedule(static, 64) //64 seems to work best, why?
+			for (int i = 0; i < N; i++){
+				for (int j = 0; j < N; j++){
+					u[i][j] += dt*du[i][j];
+					v[i][j] += dt*dv[i][j];
+				}
+			}
 	}
+
+	// for (int i = 0; i < N; i++){
+	// 	#pragma omp parallel  for
+	// 	for (int j = 0; j < N; j++){
+	// 		u[i][j] += dt*du[i][j];
+	// 		v[i][j] += dt*dv[i][j];
+	// 	}
+	// }
 }
 
 double norm(double x[N][N]){
