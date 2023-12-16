@@ -66,8 +66,6 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 				}
 			}		
 	}
-
-	
 }
 
 void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
@@ -81,7 +79,6 @@ void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 				}
 			}
 	}
-	
 }
 
 double norm(double x[N][N]){
@@ -113,7 +110,7 @@ double norm(double x[N][N]){
 
 int main(int argc, char** argv){
 	
-	omp_set_num_threads(128);
+	omp_set_num_threads(1);
 
 	double t = 0.0, nrmu, nrmv;
 	double u[N][N], v[N][N], du[N][N], dv[N][N];
