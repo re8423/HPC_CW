@@ -26,12 +26,12 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 		{
 			for (int i = 0; i < N; i++){
 				for (int j = 0; j < N; j++){
-					
+					down = 0;
 					#pragma omp task
 					{
 						// #pragma omp task
 						// {
-							printf("Hello");
+							printf(down);
 							// if (i == 0){
 							// 	down = i;
 							// }
