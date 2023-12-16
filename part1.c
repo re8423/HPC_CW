@@ -2,6 +2,7 @@
 #include <math.h>				// needed for tanh, used in init function
 #include "params.h"				// model & simulation parameters
 #include <omp.h> //openmp header file
+#include <assert.h>
 
 void init(double u[N][N], double v[N][N]){
 	double uhi, ulo, vhi, vlo;
