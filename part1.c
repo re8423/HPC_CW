@@ -100,7 +100,6 @@ int main(int argc, char** argv){
 				#pragma omp task
 				dxdt(du, dv, u, v);
 				// update the state variables u,v
-				#pragma omp task
 				step(du, dv, u, v);
 				if (k%m == 0){
 					// calculate the norms
