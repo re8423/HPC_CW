@@ -69,14 +69,21 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 	#pragma omp parrallel
 	{
-		#pragma omp for schedule(static, 64) //64 seems to work best, why?
-			for (int i = 0; i < N; i++){
-				for (int j = 0; j < N; j++){
-					#pragma omp task
-					{
-					u[i][j] += dt*du[i][j];
-					v[i][j] += dt*dv[i][j];
-					}
+		#pragma omp for  //64 seems to work best, why?
+			for (int i = 0; i < N/4; i++){
+				for (int j = 0; j < N/4; j++){
+					u[i*4][j*4] += dt*du[i*4][j*4];
+					v[i*4][j*4] += dt*dv[i*4][j*4];
+					u[i*4+1][j*4+1] += dt*du[i*4+1][j*4+1];
+					v[i*4+1][j*4+1] += dt*dv[i*4+1][j*4+1];
+					u[i*4+2][j*4+2] += dt*du[i*4+2][j*4+2];
+					v[i*4+2][j*4+2] += dt*dv[i*4+2][j*4+2];
+					u[i*4+3][j*4+3] += dt*du[i*4+3][j*4+3];
+					v[i*4+3][j*4+3] += dt*dv[i*4+3][j*4+3];
+
+
+					// u[i][j] += dt*du[i][j];
+					// v[i][j] += dt*dv[i][j];
 				}
 			}
 	}
