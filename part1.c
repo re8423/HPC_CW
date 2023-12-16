@@ -98,6 +98,7 @@ double norm(double x[N][N]){
 			for (int j = 0; j < N; j++){
 				partialsum += x[i][j]*x[i][j];
 			}
+		}
 		#pragma omp atomic
 		nrmx += partialsum;
 	}
