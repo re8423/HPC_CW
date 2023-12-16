@@ -19,11 +19,11 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 	double lapu, lapv;
 	int up, down, left, right;
 	int i, j;
-	// #pragma omp parrallel 
+	// #pragma omp parrallel for schedule(static, 128)
 
 	#pragma omp parrallel
 	{
-		#pragma omp for schedule(static, 128)
+		#pragma omp for
 		{
 			for (i = 0; i < N; i++){
 				for (j = 0; j < N; j++){
