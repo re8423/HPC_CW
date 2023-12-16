@@ -100,7 +100,7 @@ double norm(double x[N][N]){
 	// 	nrmx += partialsum;
 	// }
 
-	#pragma omp parrallel for reduction(+:nrmx) schedule(static, 128)
+	#pragma omp parrallel for reduction(+:nrmx) schedule(static)
 	for (int i = 0; i < N; i++){
 		for (int j = 0; j < N; j++){
 			nrmx += x[i][j]*x[i][j];
