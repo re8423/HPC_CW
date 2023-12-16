@@ -72,7 +72,7 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 	#pragma omp parrallel
 	{
-		#pragma omp for
+		#pragma omp for schedule(static, 128)
 			for (int i = 0; i < N; i++){
 				for (int j = 0; j < N; j++){
 					u[i][j] += dt*du[i][j];
