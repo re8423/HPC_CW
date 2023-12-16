@@ -27,7 +27,7 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 		{
 			for (i = 0; i < N; i++){
 				for (j = 0; j < N; j++){
-					#pragma omp task
+					#pragma omp task default(shared) shared (up, down, left, right)
 					{
 						#pragma omp task
 						{
@@ -65,10 +65,13 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 								right = j+1;
 							}
 						}
-						// #pragma omp taskwait
+						#pragma omp taskwait
 
 
-						
+						// up =0;
+						// down =0;
+						// left =0;
+						// right=0;
 						lapu = u[up][j] + u[down][j] + u[i][left] + u[i][right] + -4.0*u[i][j];
 						lapv = v[up][j] + v[down][j] + v[i][left] + v[i][right] + -4.0*v[i][j];
 						du[i][j] = DD*lapu + u[i][j]*(1.0 - u[i][j])*(u[i][j]-b) - v[i][j];
