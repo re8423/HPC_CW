@@ -18,7 +18,7 @@ void init(double u[N][N], double v[N][N]){
 void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // u,v are not being changed (no need for reduction)
 	double lapu, lapv;
 	int up, down, left, right;
-	// #pragma omp parrallel for collapse(2)
+	#pragma omp parrallel for collapse(2) schedule(static, 128)
 	for (int i = 0; i < N; i++){
 		for (int j = 0; j < N; j++){
 			if (i == 0){
