@@ -89,11 +89,16 @@ void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 double norm(double x[N][N]){
 	double nrmx = 0.0;
 	// #pragma omp parrallel for collapse(2)
-	for (int i = 0; i < N; i++){
-		for (int j = 0; j < N; j++){
-			nrmx += x[i][j]*x[i][j];
-		}
+	#pragma omp parrallel
+	{
+		#pragma omp for reduction(+: nrmx)
+			for (int i = 0; i < N; i++){
+				for (int j = 0; j < N; j++){
+					nrmx += x[i][j]*x[i][j];
+				}
+			}
 	}
+	
 	return nrmx;
 }
 
