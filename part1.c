@@ -30,7 +30,7 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 
 	#pragma omp parrallel
 	{ //Each value in grid is diff, hence computing du, dv for each i,v would be different, hence dynamic (i.e. work stealing is better)
-		#pragma omp for schedule(dynamic, 32)  //simple if would be faster than overhead of spawning a task (i.e. faster for same thread to do it)
+		#pragma omp for schedule(dynamic, 64)  //simple if would be faster than overhead of spawning a task (i.e. faster for same thread to do it)
 			for (int i = 0; i < N; i++){
 				for (int j = 0; j < N; j++){
 					if (i == 0){
@@ -73,7 +73,7 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 	#pragma omp parrallel
 	{
-		#pragma omp for schedule(static, 32)
+		#pragma omp for schedule(static, 64) //64 seems to work best, why?
 			for (int i = 0; i < N; i++){
 				for (int j = 0; j < N; j++){
 					u[i][j] += dt*du[i][j];
