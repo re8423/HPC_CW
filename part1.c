@@ -8,7 +8,7 @@ void init(double u[N][N], double v[N][N]){
 	uhi = 0.5; ulo = -0.5; vhi = 0.1; vlo = -0.1; // these are shared vars
 
 	//collapse wouldnt make difference if using 128 threads
-	#pragma omp parrallel //128 is grain size shared(u, v) default(shared) schedule(static, 128)
+	#pragma omp parrallel default(none) shared(u,v, uhi, ulo, vhi, vlo, N)//128 is grain size shared(u, v) default(shared) schedule(static, 128)
 	{
 		#pragma omp for schedule(dynamic) 
 			for (int i=0; i < N; i++){ //vars declared in loop are private
