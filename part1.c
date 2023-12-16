@@ -8,13 +8,17 @@ void init(double u[N][N], double v[N][N]){
 	uhi = 0.5; ulo = -0.5; vhi = 0.1; vlo = -0.1; // these are shared vars
 
 
-	#pragma omp parrallel for  //128 is grain size shared(u, v) default(shared) schedule(static, 128)
-	for (int i=0; i < N; i++){ //vars declared in loop are private
-		for (int j=0; j < N; j++){
-			u[i][j] = ulo + (uhi-ulo)*0.5*(1.0 + tanh((i-N/2)/16.0)); 
-			v[i][j] = vlo + (vhi-vlo)*0.5*(1.0 + tanh((j-N/2)/16.0));
-		}
+	#pragma omp parrallel //128 is grain size shared(u, v) default(shared) schedule(static, 128)
+	{
+		#pragma omp for
+			for (int i=0; i < N; i++){ //vars declared in loop are private
+				for (int j=0; j < N; j++){
+					u[i][j] = ulo + (uhi-ulo)*0.5*(1.0 + tanh((i-N/2)/16.0)); 
+					v[i][j] = vlo + (vhi-vlo)*0.5*(1.0 + tanh((j-N/2)/16.0));
+				}
+			}
 	}
+	
 }
 
 void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // u,v are not being changed (no need for reduction)
