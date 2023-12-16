@@ -28,7 +28,7 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 	// #pragma omp parrallel for schedule(static, 128)
 	double lapu, lapv;
 	int up, down, left, right;
-	#pragma omp parrallel default(none) private(lapu, lapv, up, down, left, right) shared(u,v)
+	#pragma omp parrallel default(none) private(lapu, lapv, up, down, left, right, u, v)
 	{ //Each value in grid is diff, hence computing du, dv for each i,v would be different, hence dynamic (i.e. work stealing is better)
 		#pragma omp for schedule(dynamic, 64)  //64 + simple if would be faster than overhead of spawning a task (i.e. faster for same thread to do it)
 			for (int i = 0; i < N/4; i++){
