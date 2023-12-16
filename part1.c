@@ -101,7 +101,7 @@ double norm(double x[N][N]){
 	// 	#pragma omp atomic
 	// 	nrmx += partialsum;
 	// }
-	#pragma omp parrallel 
+	#pragma omp parrallel shared(nrmx)
 	for (int i = 0; i < N; i++){
 		#pragma omp for reduction(+:nrmx) nowait
 		for (int j = 0; j < N; j++){
