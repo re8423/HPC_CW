@@ -124,7 +124,7 @@ int main(int argc, char** argv){
 			// update the state variables u,v
 			#pragma omp task shared (du, dv, u, v)
 			step(du, dv, u, v);
-			#pragma omp taskwait
+			// #pragma omp taskwait
 			if (k%m == 0){
 				// calculate the norms
 				nrmu = norm(u);
