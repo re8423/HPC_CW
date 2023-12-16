@@ -90,21 +90,19 @@ double norm(double x[N][N]){
 	double nrmx = 0.0;
 	// #pragma omp parrallel for collapse(2)
 
-
 	#pragma omp parrallel for reduction(+:nrmx)
-		for (int i = 0; i < N; i++){
-			for (int j = 0; j < N; j++){
-				nrmx += x[i][j]*x[i][j];
-			}
+	for (int i = 0; i < N; i++){
+		for (int j = 0; j < N; j++){
+			nrmx += x[i][j]*x[i][j];
 		}
+	}
 
-	
 	return nrmx;
 }
 
 int main(int argc, char** argv){
 	
-	omp_set_num_threads(128);
+	omp_set_num_threads(2);
 
 	double t = 0.0, nrmu, nrmv;
 	double u[N][N], v[N][N], du[N][N], dv[N][N];
