@@ -78,7 +78,7 @@ void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 
 	for (int i =0; i<N; i++){
 		#pragma omp parallel for schedule(static, 64)
-		for (int j=0, j<N, j++){
+		for (int j=;, j<N; j++){
 			u[i][j] += dt*du[i][j];
 			v[i][j] += dt*dv[i][j];
 		}
