@@ -5,11 +5,11 @@
 
 void init(double u[N][N], double v[N][N]){
 	double uhi, ulo, vhi, vlo;
-	uhi = 0.5; ulo = -0.5; vhi = 0.1; vlo = -0.1;
-	#pragma omp parrallel for collapse(2) schedule(static, 128)  //128 is grain size shared(u, v)
-	for (int i=0; i < N; i++){
+	uhi = 0.5; ulo = -0.5; vhi = 0.1; vlo = -0.1; // these are shared vars
+	#pragma omp parrallel for collapse(2) schedule(static, 128) //128 is grain size shared(u, v) default(shared)
+	for (int i=0; i < N; i++){ //vars declared in loop are private
 		for (int j=0; j < N; j++){
-			u[i][j] = ulo + (uhi-ulo)*0.5*(1.0 + tanh((i-N/2)/16.0));
+			u[i][j] = ulo + (uhi-ulo)*0.5*(1.0 + tanh((i-N/2)/16.0)); 
 			v[i][j] = vlo + (vhi-vlo)*0.5*(1.0 + tanh((j-N/2)/16.0));
 		}
 	}
@@ -88,21 +88,32 @@ int main(int argc, char** argv){
 	init(u, v);
 	
 	// time-loop
-	for (int k=0; k < M; k++){
-		// track the time
-		t = dt*k;
-		// evaluate the PDE
-		dxdt(du, dv, u, v);
-		// update the state variables u,v
-		step(du, dv, u, v);
-		if (k%m == 0){
-			// calculate the norms
-			nrmu = norm(u);
-			nrmv = norm(v);
-			printf("t = %2.1f\tu-norm = %2.5f\tv-norm = %2.5f\n", t, nrmu, nrmv);
-			fprintf(fptr, "%f\t%f\t%f\n", t, nrmu, nrmv);
-		}
+
+	#pragma omp parallel
+	{
+		#pragma omp single
+		{
+			for (int k=0; k < M; k++){
+				// track the time
+				t = dt*k;
+				// evaluate the PDE
+				#pragma omp task
+				dxdt(du, dv, u, v);
+				// update the state variables u,v
+				#pragma omp task
+				step(du, dv, u, v);
+				if (k%m == 0){
+					// calculate the norms
+					nrmu = norm(u);
+					nrmv = norm(v);
+					printf("t = %2.1f\tu-norm = %2.5f\tv-norm = %2.5f\n", t, nrmu, nrmv);
+					fprintf(fptr, "%f\t%f\t%f\n", t, nrmu, nrmv);
+				}
+				}
+		}//single barrier
 	}
+
+	
 	
 	fclose(fptr);
 	return 0;
