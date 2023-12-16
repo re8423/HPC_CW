@@ -32,11 +32,11 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 						// #pragma omp task
 						// {
 							if (i == 0){
-								printf('hi')
+								printf('hi');
 								down = i;
 							}
 							else{
-								printf('hi')
+								printf('hi');
 								down = i-1;
 							}
 						// }
