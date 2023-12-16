@@ -78,7 +78,14 @@ void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 	#pragma omp parallel for
 	for (int j0=0; j0< N; j0+=64){
 		for (int i=0; i<N; i++){
-			int j1 = MIN(j0+64, N);
+			int j1;
+
+			if (j0+64 < N){   
+			j1 = j0+64;  
+			} else {   
+			j1 = N; 
+			}
+
 			for (int j = j0; j<j1; ++j){
 				u[i][j] += dt*du[i][j];
 				v[i][j] += dt*dv[i][j];
