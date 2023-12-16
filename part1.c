@@ -2,7 +2,6 @@
 #include <math.h>				// needed for tanh, used in init function
 #include "params.h"				// model & simulation parameters
 #include <omp.h> //openmp header file
-#include <assert.h>
 
 void init(double u[N][N], double v[N][N]){
 	double uhi, ulo, vhi, vlo;
@@ -11,7 +10,7 @@ void init(double u[N][N], double v[N][N]){
 	//collapse wouldnt make difference if using 128 threads
 	#pragma omp parrallel //128 is grain size shared(u, v) default(shared) schedule(static, 128)
 	{
-		#pragma omp for schedule(dynamic) 
+		#pragma omp for schedule(static) 
 			for (int i=0; i < N; i++){ //vars declared in loop are private
 				for (int j=0; j < N; j++){
 					u[i][j] = ulo + (uhi-ulo)*0.5*(1.0 + tanh((i-N/2)/16.0)); 
@@ -29,7 +28,7 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 	int up, down, left, right;
 	#pragma omp parrallel
 	{ //Each value in grid is diff, hence computing du, dv for each i,v would be different, hence dynamic (i.e. work stealing is better)
-		#pragma omp for schedule(dynamic, 64)  //64 + simple if would be faster than overhead of spawning a task (i.e. faster for same thread to do it)
+		#pragma omp for schedule(static)  //64 + simple if would be faster than overhead of spawning a task (i.e. faster for same thread to do it)
 			for (int i = 0; i < N; i++){
 				for (int j = 0; j < N; j++){
 					if (i == 0){
@@ -68,24 +67,13 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 }
 
 void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
-	assert(N % 4 == 0);
 	#pragma omp parrallel
 	{
-		#pragma omp for schedule(static, 64) //64 seems to work best, why?
-			for (int i = 0; i < N/4; i++){
-				for (int j = 0; j < N/4; j++){
-					u[i*4][j*4] += dt*du[i*4][j*4];
-					v[i*4][j*4] += dt*dv[i*4][j*4];
-					u[i*4+1][j*4+1] += dt*du[i*4+1][j*4+1];
-					v[i*4+1][j*4+1] += dt*dv[i*4+1][j*4+1];
-					u[i*4+2][j*4+2] += dt*du[i*4+2][j*4+2];
-					v[i*4+2][j*4+2] += dt*dv[i*4+2][j*4+2];
-					u[i*4+3][j*4+3] += dt*du[i*4+3][j*4+3];
-					v[i*4+3][j*4+3] += dt*dv[i*4+3][j*4+3];
-
-
-					// u[i][j] += dt*du[i][j];
-					// v[i][j] += dt*dv[i][j];
+		#pragma omp for schedule(static) //64 seems to work best, why?
+			for (int i = 0; i < N; i++){
+				for (int j = 0; j < N; j++){
+					u[i][j] += dt*du[i][j];
+					v[i][j] += dt*dv[i][j];
 				}
 			}
 	}
