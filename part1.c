@@ -24,7 +24,6 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 	#pragma omp parrallel
 	{
 		#pragma omp for
-		{
 			for (i = 0; i < N; i++){
 				for (j = 0; j < N; j++){
 					#pragma omp task 
@@ -73,7 +72,7 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 				}
 			}
 			// #pragma omp taskwait
-		}
+		
 	}
 
 	
