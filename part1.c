@@ -69,7 +69,7 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 						// #pragma omp taskwait
 					}
 					up = i;
-					down = i
+					down = i;
 					left = i;
 					right = i;
 					lapu = u[up][j] + u[down][j] + u[i][left] + u[i][right] + -4.0*u[i][j];
