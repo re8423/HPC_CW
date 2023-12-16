@@ -93,12 +93,13 @@ double norm(double x[N][N]){
 	// 	#pragma omp atomic
 	// 	nrmx += partialsum;
 	// }
-
 	#pragma omp parrallel for reduction(+:nrmx) schedule(static)
 	for (int i = 0; i < N; i++){
 		for (int j = 0; j < N; j++){
 			nrmx += x[i][j]*x[i][j];
 		}
+		printf("This program uses %d threads.\n", omp_get_num_threads());
+
 	}
 
 	return nrmx;
@@ -119,7 +120,7 @@ int main(int argc, char** argv){
 	
 	// time-loop
 	for (int k=0; k < M; k++){
-		printf("This program uses %d threads.\n", omp_get_num_threads());
+		// printf("This program uses %d threads.\n", omp_get_num_threads());
 		// track the time
 		t = dt*k;
 		// evaluate the PDE
