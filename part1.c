@@ -59,7 +59,6 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 								right = j+1;
 							}
 						}
-						#pragma omp taskwait
 
 						#pragma omp task default(shared)
 						{
