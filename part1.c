@@ -98,7 +98,7 @@ double norm(double x[N][N]){
 		for (int j = 0; j < N; j++){
 			nrmx += x[i][j]*x[i][j];
 		}
-		printf("This program uses %d threads.\n", omp_get_num_threads());
+		// printf("This program uses %d threads.\n", omp_get_num_threads());
 
 	}
 
@@ -107,7 +107,7 @@ double norm(double x[N][N]){
 
 int main(int argc, char** argv){
 	
-	omp_set_num_threads(1);
+	omp_set_num_threads(128);
 
 	double t = 0.0, nrmu, nrmv;
 	double u[N][N], v[N][N], du[N][N], dv[N][N];
@@ -120,7 +120,7 @@ int main(int argc, char** argv){
 	
 	// time-loop
 	for (int k=0; k < M; k++){
-		// printf("This program uses %d threads.\n", omp_get_num_threads());
+		printf("This program uses %d threads.\n", omp_get_num_threads());
 		// track the time
 		t = dt*k;
 		// evaluate the PDE
