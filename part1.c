@@ -28,7 +28,7 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 
 	#pragma omp parrallel
 	{
-		#pragma omp for collapse(2)
+		#pragma omp for
 			for (int i = 0; i < N; i++){
 				for (int j = 0; j < N; j++){
 					if (i == 0){
@@ -73,12 +73,17 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 
 void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 	// #pragma omp parrallel for collapse(2)
-	for (int i = 0; i < N; i++){
-		for (int j = 0; j < N; j++){
-			u[i][j] += dt*du[i][j];
-			v[i][j] += dt*dv[i][j];
-		}
+	#pragma omp parrallel
+	{
+		#pragma omp for
+			for (int i = 0; i < N; i++){
+				for (int j = 0; j < N; j++){
+					u[i][j] += dt*du[i][j];
+					v[i][j] += dt*dv[i][j];
+				}
+			}
 	}
+	
 }
 
 double norm(double x[N][N]){
