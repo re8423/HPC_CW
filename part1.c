@@ -18,55 +18,54 @@ void init(double u[N][N], double v[N][N]){
 void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // u,v are not being changed (no need for reduction)
 	double lapu, lapv;
 	int up, down, left, right;
+	int i, j;
 	// #pragma omp parrallel for schedule(static, 128)
 
 	#pragma omp parrallel
 	{
 		#pragma omp single 
 		{
-			for (int i = 0; i < N; i++){
-				for (int j = 0; j < N; j++){
-					down = 0;
+			for (i = 0; i < N; i++){
+				for (j = 0; j < N; j++){
 					#pragma omp task
 					{
-						// #pragma omp task
-						// {
-							printf("%d", down);
-							// if (i == 0){
-							// 	down = i;
-							// }
-							// else{
-							// 	down = i-1;
-							// }
-						// }
-						// #pragma omp task
-						// {
-						// 	if (i == N-1){
-						// 		up = i;
-						// 	}
-						// 	else{
-						// 		up = i+1;
-						// 	}
-						// // }
-						// // #pragma omp task
-						// // {
-						// 	if (j == 0){
-						// 		left = j;
-						// 	}
-						// 	else{
-						// 		left = j-1;
-						// 	}
-						// // }
-						// // #pragma omp task
-						// // {
-						// 	if (j == N-1){
-						// 		right = j;
-						// 	}
-						// 	else{
-						// 		right = j+1;
-						// 	}
-						// }
-						// #pragma omp taskwait
+						#pragma omp task
+						{
+							if (i == 0){
+								down = i;
+							}
+							else{
+								down = i-1;
+							}
+						}
+						#pragma omp task
+						{
+							if (i == N-1){
+								up = i;
+							}
+							else{
+								up = i+1;
+							}
+						}
+						#pragma omp task
+						{
+							if (j == 0){
+								left = j;
+							}
+							else{
+								left = j-1;
+							}
+						}
+						#pragma omp task
+						{
+							if (j == N-1){
+								right = j;
+							}
+							else{
+								right = j+1;
+							}
+						}
+						#pragma omp taskwait
 					}
 					up = i;
 					down = i;
