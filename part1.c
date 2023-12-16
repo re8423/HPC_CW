@@ -20,11 +20,10 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 	int up, down, left, right;
 	// #pragma omp parrallel for schedule(static, 128)
 
-	#pragma omp parrallel shared(up, down, left, right, lapu, lapv)
+	#pragma omp parrallel
 	{
 		#pragma omp single 
 		{
-
 			for (int i = 0; i < N; i++){
 				for (int j = 0; j < N; j++){
 					
@@ -33,9 +32,11 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 						// #pragma omp task
 						// {
 							if (i == 0){
+								printf('hi')
 								down = i;
 							}
 							else{
+								printf('hi')
 								down = i-1;
 							}
 						// }
