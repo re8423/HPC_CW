@@ -105,6 +105,13 @@ double norm(double x[N][N]){
 	return nrmx;
 }
 
+int omp_thread_count() {
+    int n = 0;
+    #pragma omp parallel reduction(+:n)
+    n += 1;
+    return n;
+}
+
 int main(int argc, char** argv){
 	
 	omp_set_num_threads(128);
