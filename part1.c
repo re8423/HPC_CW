@@ -71,12 +71,9 @@ void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 	{
 		#pragma omp for schedule(static, 64) //64 seems to work best, why?
 			for (int i = 0; i < N; i++){
-
-				#pragma omp single
-
-
 				for (int j = 0; j < N; j++){
-					#pragma omp task{
+					#pragma omp task
+					{
 					u[i][j] += dt*du[i][j];
 					v[i][j] += dt*dv[i][j];
 					}
