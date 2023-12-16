@@ -90,25 +90,25 @@ double norm(double x[N][N]){
 	double nrmx = 0.0;
 	// #pragma omp parrallel for collapse(2)
 
-	#pragma omp parallel
-	{
-		int partialsum = 0;
-		#pragma omp for
-		for (int i = 0; i < N; i++){
-			for (int j = 0; j < N; j++){
-				partialsum += x[i][j]*x[i][j];
-			}
-		}
-		#pragma omp atomic
-		nrmx += partialsum;
-	}
-
-	// #pragma omp parrallel for reduction(+:nrmx)
-	// for (int i = 0; i < N; i++){
-	// 	for (int j = 0; j < N; j++){
-	// 		nrmx += x[i][j]*x[i][j];
+	// #pragma omp parallel
+	// {
+	// 	int partialsum = 0;
+	// 	#pragma omp for
+	// 	for (int i = 0; i < N; i++){
+	// 		for (int j = 0; j < N; j++){
+	// 			partialsum += x[i][j]*x[i][j];
+	// 		}
 	// 	}
+	// 	#pragma omp atomic
+	// 	nrmx += partialsum;
 	// }
+
+	#pragma omp parrallel for reduction(+:nrmx)
+	for (int i = 0; i < N; i++){
+		for (int j = 0; j < N; j++){
+			nrmx += x[i][j]*x[i][j];
+		}
+	}
 
 	return nrmx;
 }
