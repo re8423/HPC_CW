@@ -22,7 +22,7 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 
 	#pragma omp parrallel
 	{
-		#pragma omp single
+		#pragma omp single shared(up, down, left, right, lapu, lapv)
 		{
 
 			for (int i = 0; i < N; i++){
