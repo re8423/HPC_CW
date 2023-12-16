@@ -10,7 +10,7 @@ void init(double u[N][N], double v[N][N]){
 	//collapse wouldnt make difference if using 128 threads
 	#pragma omp parrallel //128 is grain size shared(u, v) default(shared) schedule(static, 128)
 	{
-		#pragma omp for schedule(dynamic) nowait
+		#pragma omp for schedule(dynamic) 
 			for (int i=0; i < N; i++){ //vars declared in loop are private
 				for (int j=0; j < N; j++){
 					u[i][j] = ulo + (uhi-ulo)*0.5*(1.0 + tanh((i-N/2)/16.0)); 
@@ -24,44 +24,61 @@ void init(double u[N][N], double v[N][N]){
 void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // u,v are not being changed (no need for reduction)
 	double lapu, lapv;
 	int up, down, left, right;
+	int i, j;
 	// #pragma omp parrallel for schedule(static, 128)
 
 	#pragma omp parrallel
 	{
-		#pragma omp for schedule(dynamic) nowait
-			for (int i = 0; i < N; i++){
-				for (int j = 0; j < N; j++){
-					if (i == 0){
-						down = i;
+		#pragma omp for schedule(dynamic)
+			for (i = 0; i < N; i++){
+				for (j = 0; j < N; j++){
+					#pragma omp task default(shared)
+					{
+						#pragma omp task
+						{
+							if (i == 0){
+								down = i;
+							}
+							else{
+								down = i-1;
+							}
+						}
+						#pragma omp task
+						{
+							if (i == N-1){
+								up = i;
+							}
+							else{
+								up = i+1;
+							}
+						}
+						#pragma omp task
+						{
+							if (j == 0){
+								left = j;
+							}
+							else{
+								left = j-1;
+							}
+						}
+						#pragma omp task
+						{
+							if (j == N-1){
+								right = j;
+							}
+							else{
+								right = j+1;
+							}
+						}
+						#pragma omp taskwait
 					}
-					else{
-						down = i-1;
+					#pragma omp task default(shared)
+					{
+						lapu = u[up][j] + u[down][j] + u[i][left] + u[i][right] + -4.0*u[i][j];
+						lapv = v[up][j] + v[down][j] + v[i][left] + v[i][right] + -4.0*v[i][j];
+						du[i][j] = DD*lapu + u[i][j]*(1.0 - u[i][j])*(u[i][j]-b) - v[i][j];
+						dv[i][j] = d*DD*lapv + c*(a*u[i][j] - v[i][j]);
 					}
-
-					if (i == N-1){
-						up = i;
-					}
-					else{
-						up = i+1;
-					}
-
-					if (j == 0){
-						left = j;
-					}
-					else{
-						left = j-1;
-					}
-
-					if (j == N-1){
-						right = j;
-					}
-					else{
-						right = j+1;
-					}
-				lapu = u[up][j] + u[down][j] + u[i][left] + u[i][right] + -4.0*u[i][j];
-				lapv = v[up][j] + v[down][j] + v[i][left] + v[i][right] + -4.0*v[i][j];
-				du[i][j] = DD*lapu + u[i][j]*(1.0 - u[i][j])*(u[i][j]-b) - v[i][j];
-				dv[i][j] = d*DD*lapv + c*(a*u[i][j] - v[i][j]);
 				}
 			}		
 	}
@@ -72,7 +89,7 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 	#pragma omp parrallel
 	{
-		#pragma omp for schedule(dynamic) nowait
+		#pragma omp for schedule(dynamic)
 			for (int i = 0; i < N; i++){
 				for (int j = 0; j < N; j++){
 					u[i][j] += dt*du[i][j];
@@ -100,7 +117,7 @@ double norm(double x[N][N]){
 	// 	nrmx += partialsum;
 	// }
 
-	#pragma omp parrallel for reduction(+:nrmx) schedule(dynamic) nowait
+	#pragma omp parrallel for reduction(+:nrmx) schedule(dynamic)
 	for (int i = 0; i < N; i++){
 		for (int j = 0; j < N; j++){
 			nrmx += x[i][j]*x[i][j];
