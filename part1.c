@@ -120,7 +120,7 @@ int main(int argc, char** argv){
 	
 	// time-loop
 	for (int k=0; k < M; k++){
-		printf("This program uses %d threads.\n", omp_get_num_threads());
+		printf("This program uses %d threads.\n", omp_thread_count());
 		// track the time
 		t = dt*k;
 		// evaluate the PDE
