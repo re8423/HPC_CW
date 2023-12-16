@@ -6,11 +6,10 @@
 void init(double u[N][N], double v[N][N]){
 	double uhi, ulo, vhi, vlo;
 	uhi = 0.5; ulo = -0.5; vhi = 0.1; vlo = -0.1; // these are shared vars
-// default(none) shared(u,v, uhi, ulo, vhi, vlo, N)
 	//collapse wouldnt make difference if using 128 threads
 	#pragma omp parrallel //128 is grain size shared(u, v) default(shared) schedule(static, 128)
 	{
-		#pragma omp for schedule(dynamic, 128) 
+		#pragma omp for schedule(dynamic) 
 			for (int i=0; i < N; i++){ //vars declared in loop are private
 				for (int j=0; j < N; j++){
 					u[i][j] = ulo + (uhi-ulo)*0.5*(1.0 + tanh((i-N/2)/16.0)); 
@@ -21,12 +20,13 @@ void init(double u[N][N], double v[N][N]){
 }
 
 void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // u,v are not being changed (no need for reduction)
+	
 	// #pragma omp parrallel for schedule(static, 128)
 	double lapu, lapv;
 	int up, down, left, right;
 	#pragma omp parrallel default(none) private(lapu, lapv, up, down, left, right) shared(du, dv, u, v, N, a, b, c, d)
 	{ //Each value in grid is diff, hence computing du, dv for each i,v would be different, hence dynamic (i.e. work stealing is better)
-		#pragma omp for schedule(dynamic, 128)  //64 + simple if would be faster than overhead of spawning a task (i.e. faster for same thread to do it)
+		#pragma omp for schedule(dynamic, 64)  //64 + simple if would be faster than overhead of spawning a task (i.e. faster for same thread to do it)
 			for (int i = 0; i < N; i++){
 				for (int j = 0; j < N; j++){
 					if (i == 0){
@@ -67,7 +67,7 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 	#pragma omp parrallel
 	{
-		#pragma omp for schedule(static, 128) //64 seems to work best, why?
+		#pragma omp for schedule(static, 64) //64 seems to work best, why?
 			for (int i = 0; i < N; i++){
 				for (int j = 0; j < N; j++){
 					u[i][j] += dt*du[i][j];
@@ -94,7 +94,7 @@ double norm(double x[N][N]){
 	// 	nrmx += partialsum;
 	// }
 
-	#pragma omp parrallel for reduction(+:nrmx) schedule(static, 128)
+	#pragma omp parrallel for reduction(+:nrmx) schedule(static)
 	for (int i = 0; i < N; i++){
 		for (int j = 0; j < N; j++){
 			nrmx += x[i][j]*x[i][j];
