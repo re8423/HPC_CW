@@ -93,7 +93,8 @@ int main(int argc, char** argv){
 	{
 		#pragma omp single
 		{
-			#pragma omp task{
+			#pragma omp task
+			{
 				for (int k=0; k < M; k++){
 					// track the time
 					t = dt*k;
