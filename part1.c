@@ -124,21 +124,39 @@ int main(int argc, char** argv){
 	init(u, v);
 	
 	// time-loop
-	for (int k=0; k < M; k++){
-		// track the time
-		t = dt*k;
-		// evaluate the PDE
-		dxdt(du, dv, u, v);
-		// update the state variables u,v
-		step(du, dv, u, v);
-		if (k%m == 0){
-			// calculate the norms
-			nrmu = norm(u);
-			nrmv = norm(v);
-			printf("t = %2.1f\tu-norm = %2.5f\tv-norm = %2.5f\n", t, nrmu, nrmv);
-			fprintf(fptr, "%f\t%f\t%f\n", t, nrmu, nrmv);
+	#pragma opm parrallel
+	{
+		#pragma opm for
+		for (int k=0; k < M; k++){
+			// track the time
+			t = dt*k;
+
+			#pragma omp task
+			{
+				// evaluate the PDE
+				#pragma omp task
+				{
+					dxdt(du, dv, u, v);
+				}
+				#pragma omp task
+				{
+					// update the state variables u,v
+					step(du, dv, u, v);
+				}
+				#pragma taskwait
+				if (k%m == 0){
+					// calculate the norms
+					nrmu = norm(u);
+					nrmv = norm(v);
+					printf("t = %2.1f\tu-norm = %2.5f\tv-norm = %2.5f\n", t, nrmu, nrmv);
+					fprintf(fptr, "%f\t%f\t%f\n", t, nrmu, nrmv);
+				}
+			}
+
+			
 		}
 	}
+	
 	
 	fclose(fptr);
 	return 0;
