@@ -30,7 +30,7 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 					
 					#pragma omp task
 					{
-						#pragma omp task
+						#pragma omp task firstprivate(down)
 						{
 							if (i == 0){
 								down = i;
@@ -39,7 +39,7 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 								down = i-1;
 							}
 						}
-						#pragma omp task
+						#pragma omp task firstprivate(up)
 						{
 							if (i == N-1){
 								up = i;
@@ -48,7 +48,7 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 								up = i+1;
 							}
 						}
-						#pragma omp task
+						#pragma omp task firstprivate(left)
 						{
 							if (j == 0){
 								left = j;
@@ -57,7 +57,7 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 								left = j-1;
 							}
 						}
-						#pragma omp task
+						#pragma omp task firstprivate(right)
 						{
 							if (j == N-1){
 								right = j;
@@ -68,14 +68,10 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 						}
 						#pragma omp taskwait
 					}
-
 					lapu = u[up][j] + u[down][j] + u[i][left] + u[i][right] + -4.0*u[i][j];
 					lapv = v[up][j] + v[down][j] + v[i][left] + v[i][right] + -4.0*v[i][j];
 					du[i][j] = DD*lapu + u[i][j]*(1.0 - u[i][j])*(u[i][j]-b) - v[i][j];
 					dv[i][j] = d*DD*lapv + c*(a*u[i][j] - v[i][j]);
-					
-					
-				
 				}
 			}
 			#pragma omp taskwait
