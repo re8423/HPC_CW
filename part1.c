@@ -63,16 +63,13 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 				du[i][j] = DD*lapu + u[i][j]*(1.0 - u[i][j])*(u[i][j]-b) - v[i][j];
 				dv[i][j] = d*DD*lapv + c*(a*u[i][j] - v[i][j]);
 				}
-			}
-			// #pragma omp taskwait
-		
+			}		
 	}
 
 	
 }
 
 void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
-	// #pragma omp parrallel for collapse(2)
 	#pragma omp parrallel
 	{
 		#pragma omp for
@@ -90,9 +87,9 @@ double norm(double x[N][N]){
 	double nrmx = 0.0;
 	// #pragma omp parrallel for collapse(2)
 
-	// #pragma omp parallel
+	// #pragma omp parallel 
 	// {
-	// 	int partialsum = 0;
+	// 	int partialsum = 0; #partial sum is slow because you would need 128 different partial sums
 	// 	#pragma omp for
 	// 	for (int i = 0; i < N; i++){
 	// 		for (int j = 0; j < N; j++){
@@ -103,7 +100,7 @@ double norm(double x[N][N]){
 	// 	nrmx += partialsum;
 	// }
 
-	#pragma omp parrallel for reduction(+:nrmx)
+	#pragma omp parrallel for reduction(+:nrmx) schedule(static, 128)
 	for (int i = 0; i < N; i++){
 		for (int j = 0; j < N; j++){
 			nrmx += x[i][j]*x[i][j];
