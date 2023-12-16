@@ -110,33 +110,22 @@ int main(int argc, char** argv){
 	// initialize the state
 	init(u, v);
 	
-	#pragma omp parralell
-	{
-		#pragma omp single
-		{
 	// time-loop
-		for (int k=0; k < M; k++){
-			// track the time
-			t = dt*k;
-			// evaluate the PDE
-			#pragma omp task shared (du, dv, u, v)
-			dxdt(du, dv, u, v);
-			// update the state variables u,v
-			#pragma omp task shared (du, dv, u, v)
-			step(du, dv, u, v);
-			// #pragma omp taskwait
-			if (k%m == 0){
-				// calculate the norms
-				nrmu = norm(u);
-				nrmv = norm(v);
-				printf("t = %2.1f\tu-norm = %2.5f\tv-norm = %2.5f\n", t, nrmu, nrmv);
-				fprintf(fptr, "%f\t%f\t%f\n", t, nrmu, nrmv);
-			}
-		}
+	for (int k=0; k < M; k++){
+		// track the time
+		t = dt*k;
+		// evaluate the PDE
+		dxdt(du, dv, u, v);
+		// update the state variables u,v
+		step(du, dv, u, v);
+		if (k%m == 0){
+			// calculate the norms
+			nrmu = norm(u);
+			nrmv = norm(v);
+			printf("t = %2.1f\tu-norm = %2.5f\tv-norm = %2.5f\n", t, nrmu, nrmv);
+			fprintf(fptr, "%f\t%f\t%f\n", t, nrmu, nrmv);
 		}
 	}
-
-	
 	
 	fclose(fptr);
 	return 0;
