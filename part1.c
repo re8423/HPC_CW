@@ -15,8 +15,6 @@ void init(double u[N][N], double v[N][N]){
 				for (int j=0; j < N; j++){
 					u[i][j] = ulo + (uhi-ulo)*0.5*(1.0 + tanh((i-N/2)/16.0)); 
 					v[i][j] = vlo + (vhi-vlo)*0.5*(1.0 + tanh((j-N/2)/16.0));
-					// u[i][j] = ulo + (uhi-ulo)*0.5*(1.0 + tanh((i-N/2)*0.0625)); 
-					// v[i][j] = vlo + (vhi-vlo)*0.5*(1.0 + tanh((j-N/2)*0.0625));
 				}
 			}
 	}
@@ -73,9 +71,15 @@ void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 	{
 		#pragma omp for schedule(static, 64) //64 seems to work best, why?
 			for (int i = 0; i < N; i++){
+
+				#pragma omp single
+
+
 				for (int j = 0; j < N; j++){
+					#pragma omp task{
 					u[i][j] += dt*du[i][j];
 					v[i][j] += dt*dv[i][j];
+					}
 				}
 			}
 	}
