@@ -107,10 +107,10 @@ int main(int argc, char** argv){
 		if (k%m == 0){
 			// calculate the norms
 			nrmu = norm(u);
-			#pragma omp barrier
+			// #pragma omp barrier
 
 			nrmv = norm(v);
-			#pragma omp barrier
+			// #pragma omp barrier
 
 			#pragma omp single
 			{
