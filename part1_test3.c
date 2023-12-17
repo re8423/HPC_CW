@@ -6,7 +6,7 @@
 void init(double u[N][N], double v[N][N]){
 	double uhi, ulo, vhi, vlo;
 	uhi = 0.5; ulo = -0.5; vhi = 0.1; vlo = -0.1;
-	#pragma omp parrallel for schedule( dynamic )
+	#pragma omp parrallel for schedule( static )
 	for (int i=0; i < N; i++){
 		for (int j=0; j < N; j++){
 			u[i][j] = ulo + (uhi-ulo)*0.5*(1.0 + tanh((i-N/2)/16.0));
@@ -18,7 +18,7 @@ void init(double u[N][N], double v[N][N]){
 void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 	double lapu, lapv;
 	int up, down, left, right;
-	#pragma omp for schedule( dynamic )
+	#pragma omp for schedule( static )
 	for (int i = 0; i < N; i++){
 		for (int j = 0; j < N; j++){
 			if (i == 0){
