@@ -30,8 +30,7 @@ double funcC (int* a, int b, int* c){
     for (int ii = 0; ii < b; ii++){
         for (int jj = 0; jj < b; jj++){
           // alter values of a and c
-            k += sqrt(a[ii*jj] + c[ii**jj]);
-        }
+            k += a[i][j]*c[i][j];
     }
     return k;
 }
