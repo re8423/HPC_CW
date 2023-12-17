@@ -106,7 +106,7 @@ printf("This program uses %d threads.\n", omp_thread_count());
 
 
 init(u, v);
-#pragma omp parallel shared( u, b, v )
+#pragma omp parallel shared( u, b, v , du, dv)
 
 for (int i = 0; i < M; i++){
     funcA(u,b,v);
