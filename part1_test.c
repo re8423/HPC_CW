@@ -3,12 +3,12 @@
 #include "params.h"				// model & simulation parameters
 #include <omp.h> //openmp header file
 
-void funcA( double a[N][N], int b, double c[N][N] ) {
+void funcA( double a[N][N], double c[N][N] ) {
     double lapu, lapv;
 	int up, down, left, right;
     #pragma omp for schedule( static )
-    for (int i = 0; i < b; i++) {
-        for (int j = 0; j < b; j++) {
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
           if (i == 0){
             down = i;
         }
@@ -43,10 +43,10 @@ void funcA( double a[N][N], int b, double c[N][N] ) {
     }
 }
 
-void funcB( double a[N][N], int b, double c[N][N] ) {
+void funcB( double a[N][N], double c[N][N] ) {
     #pragma omp for schedule( static )
-    for (int ii = 0; ii < b; ii++) {
-        for (int jj = 0; jj < b; jj++) {
+    for (int ii = 0; ii < N; ii++) {
+        for (int jj = 0; jj < N; jj++) {
           a = a + 2;
           c = c + 2;
         }
@@ -54,11 +54,11 @@ void funcB( double a[N][N], int b, double c[N][N] ) {
 }
 
 
-double funcC (double a[N][N], int b, double c[N][N]){
+double funcC (double a[N][N], double c[N][N]){
     double nrxw = 0;
-    #pragma omp parallel for shared(a,b,c) reduction(+:nrxw)
-    for (int ii = 0; ii < b; ii++){
-        for (int jj = 0; jj < b; jj++){
+    #pragma omp parallel for shared(a,c) reduction(+:nrxw)
+    for (int ii = 0; ii < N; ii++){
+        for (int jj = 0; jj < N; jj++){
           // alter values of a and c
             nrxw += a[ii][jj]*c[ii][jj];
     }
