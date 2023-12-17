@@ -63,8 +63,8 @@ void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 	}
 }
 
-double norm(double x[N][N]){
-	double nrmx = 0.0;
+double norm(double x[N][N], double nrmx){
+	
 	#pragma omp for reduction(+:nrmx)
 	for (int i = 0; i < N; i++){
 		for (int j = 0; j < N; j++){
@@ -84,7 +84,7 @@ int main(int argc, char** argv){
 	
 	// initialize the state
 	init(u, v);
-	
+	double nrmx = 0.0;
 	// time-loop
 	#pragma omp parallel shared( u, v , du, dv)
 	for (int k=0; k < M; k++){
@@ -96,8 +96,9 @@ int main(int argc, char** argv){
 		step(du, dv, u, v);
 		if (k%m == 0){
 			// calculate the norms
-			nrmu = norm(u);
-			nrmv = norm(v);
+			nrmu = norm(u, nrmx);
+			nrmx = 0.0;
+			nrmv = norm(v), nrmx;
 			printf("t = %2.1f\tu-norm = %2.5f\tv-norm = %2.5f\n", t, nrmu, nrmv);
 			fprintf(fptr, "%f\t%f\t%f\n", t, nrmu, nrmv);
 		}
