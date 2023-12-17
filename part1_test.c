@@ -3,6 +3,24 @@
 #include "params.h"				// model & simulation parameters
 #include <omp.h> //openmp header file
 
+void init(double a[N][N], double c[N][N]){
+	double uhi, ulo, vhi, vlo;
+	uhi = 0.5; ulo = -0.5; vhi = 0.1; vlo = -0.1; // these are shared vars
+
+	//collapse wouldnt make difference if using 128 threads
+	#pragma omp parrallel for schedule( static )
+	for (int i=0; i < N; i++){ //vars declared in loop are private
+		for (int j=0; j < N; j++){
+			// u[i][j] = ulo + (uhi-ulo)*0.5*(1.0 + tanh((i-N/2)/16.0)); 
+			// v[i][j] = vlo + (vhi-vlo)*0.5*(1.0 + tanh((j-N/2)/16.0));
+			a[i][j] = ulo + (uhi-ulo)*0.5*(1.0 + tanh((i-N/2)*0.0625)); 
+			c[i][j] = vlo + (vhi-vlo)*0.5*(1.0 + tanh((j-N/2)*0.0625));
+		}
+	}
+	
+	
+}
+
 void funcA( int a[N][N], int b, int c[N][N] ) {
     #pragma omp for schedule( static )
     for (int ii = 0; ii < b; ii++) {
