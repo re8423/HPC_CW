@@ -110,7 +110,7 @@ int main(int argc, char** argv){
 			#pragma omp barrier //need barrier after atomic (after a thread has finished adding to nrmx, it will otherwise move in to next norm function, hence changing the value of nrmx)
 
 			nrmv = norm(v);
-			// #pragma omp barrier
+			#pragma omp barrier
 
 			#pragma omp single
 			{
