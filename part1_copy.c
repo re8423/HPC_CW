@@ -76,7 +76,7 @@ void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 	}
 }
 
-double norm(double x[N][N], double nrmx){
+double norm(double x[N][N], nrmx){
 	
 	// #pragma omp parrallel for collapse(2)
 
