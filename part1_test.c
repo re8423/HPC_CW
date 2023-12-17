@@ -50,7 +50,7 @@ for (int i = 0; i < M; i++){
     
     if (i%m == 0){
     ans = funcC(a,b,c);
-    printf("%d",ans);
+    // printf("%d",ans);
     }
 }
 // printf("%d",ans);
