@@ -3,7 +3,7 @@
 #include "params.h"				// model & simulation parameters
 #include <omp.h> //openmp header file
 
-void funcA( double a[N][N], double c[N][N] ) {
+void funcA(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]) {
     double lapu, lapv;
 	int up, down, left, right;
     #pragma omp for schedule( static )
@@ -92,13 +92,13 @@ double u[N][N], v[N][N], du[N][N], dv[N][N];
 
 // double u[N][N], v[N][N];
 // int b = N;
-// double ans = 0;
+double ans = 0;
 init(u, v);
 
 
 #pragma omp parallel shared( u, v )
 for (int k = 0; k < M; k++){
-    funcA(u,v);
+    funcA(du, dv, u, v);;
     funcB(u,v);
     
     if (k%m == 0){
