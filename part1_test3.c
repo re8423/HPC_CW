@@ -112,8 +112,12 @@ int main(int argc, char** argv){
 			nrmv = norm(v);
 			#pragma omp barrier
 
+			#pragma omp single
+			{
 			printf("t = %2.1f\tu-norm = %2.5f\tv-norm = %2.5f\n", t, nrmu, nrmv);
 			fprintf(fptr, "%f\t%f\t%f\n", t, nrmu, nrmv);
+			}
+			
 		}
 	}
 	
