@@ -101,7 +101,6 @@ int omp_thread_count() {
 }
 
 int main(int argc, char** argv){
-double ans = 0;
 double t = 0.0, nrmu, nrmv;
 // omp_set_num_threads(4);
 double u[N][N], v[N][N], du[N][N], dv[N][N];
