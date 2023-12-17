@@ -6,7 +6,7 @@
 void init(double u[N][N], double v[N][N]){
 	double uhi, ulo, vhi, vlo;
 	uhi = 0.5; ulo = -0.5; vhi = 0.1; vlo = -0.1;
-	#pragma omp parrallel for schedule( static )
+	#pragma omp for schedule( static )
 	for (int i=0; i < N; i++){
 		for (int j=0; j < N; j++){
 			u[i][j] = ulo + (uhi-ulo)*0.5*(1.0 + tanh((i-N/2)/16.0));
@@ -93,9 +93,12 @@ int main(int argc, char** argv){
 	fprintf(fptr, "#t\t\tnrmu\t\tnrmv\n");
 	
 	// initialize the state
-	init(u, v);
+	
 	// time-loop
 	#pragma omp parallel shared( u, v , du, dv) //have to call reduction here but cant pass this to norm since cant change header file
+	
+	init(u, v);
+
 	// double nrmx = 0.0;
 	for (int k=0; k < M; k++){
 		// track the time
