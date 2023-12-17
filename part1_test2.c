@@ -69,18 +69,9 @@ void funcB( double u[N][N], int b, double v[N][N], double du[N][N], double dv[N]
 	}
 }
 
-// void funcC( int a[N][N], int b, int c[N][N] ) {
-//     #pragma omp for schedule( static )
-//     for (int ii = 0; ii < b; ii++) {
-//         for (int jj = 0; jj < b; jj++) {
-//           a[ii][jj] += 1;
-//           c[ii][jj] += 1;
-//         }
-//     }
-// }
 double funcC (double x[N][N]){
-    double nrmx = 0;
-    int partialsum = 0; //partial sum is slow because you would need 128 different partial sums
+    double nrmx = 0.0;
+    double partialsum = 0.0; //partial sum is slow because you would need 128 different partial sums
 	#pragma omp for schedule( static )
 	for (int i = 0; i < N; i++){
 		for (int j = 0; j < N; j++){
@@ -90,6 +81,9 @@ double funcC (double x[N][N]){
 	#pragma omp atomic
 	nrmx += partialsum;
     return nrmx;
+
+
+}
     // double k = 0;
     // #pragma omp parallel for reduction(+:k)
     // for (int ii = 0; ii < N; ii++){
