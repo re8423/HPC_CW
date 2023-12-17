@@ -60,6 +60,7 @@ int main(int argc, char** argv){
 int a[N][N], c[N][N];
 int b = N;
 double ans = 0;
+init(a, c);
 
 #pragma omp parallel shared( a, b, c )
 for (int i = 0; i < M; i++){
