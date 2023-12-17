@@ -113,14 +113,10 @@ int main(int argc, char** argv){
 	
 	// initialize the state
 
-	
-		
 	init(u, v);
-	
 	// time-loop
+	#pragma omp parrallel
 	for (int k=0; k < M; k++){
-		#pragma omp parrallel
-		{
 		// track the time
 		t = dt*k;
 		// evaluate the PDE
@@ -134,8 +130,8 @@ int main(int argc, char** argv){
 			printf("t = %2.1f\tu-norm = %2.5f\tv-norm = %2.5f\n", t, nrmu, nrmv);
 			fprintf(fptr, "%f\t%f\t%f\n", t, nrmu, nrmv);
 		}
-		}
 	}
+	
 
 	
 	
