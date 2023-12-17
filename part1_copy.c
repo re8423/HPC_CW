@@ -8,7 +8,7 @@ void init(double u[N][N], double v[N][N]){
 	uhi = 0.5; ulo = -0.5; vhi = 0.1; vlo = -0.1; // these are shared vars
 
 	//collapse wouldnt make difference if using 128 threads
-	#pragma omp for
+	#pragma omp taskloop
 	for (int i=0; i < N; i++){ //vars declared in loop are private
 		for (int j=0; j < N; j++){
 			// u[i][j] = ulo + (uhi-ulo)*0.5*(1.0 + tanh((i-N/2)/16.0)); 
@@ -27,7 +27,7 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 	
 	double lapu, lapv;
 	int up, down, left, right;
-	#pragma omp for
+	#pragma omp taskloop
 	for (int i = 0; i < N; i++){
 		for (int j = 0; j < N; j++){
 			if (i == 0){
@@ -67,7 +67,7 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 }
 
 void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
-	#pragma omp for
+	#pragma omp taskloop
 	for (int i = 0; i < N; i++){
 		for (int j = 0; j < N; j++){
 			u[i][j] += dt*du[i][j];
@@ -76,8 +76,8 @@ void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 	}
 }
 
-double norm(double x[N][N], nrmx){
-	
+double norm(double x[N][N]){
+	double nrmx = 0.0;
 	// #pragma omp parrallel for collapse(2)
 
 	// #pragma omp parallel 
@@ -115,7 +115,10 @@ int main(int argc, char** argv){
 
 	#pragma omp parrallel
 	{
-	double nrmx = 0.0;
+
+	#pragma omp single nowait
+	{
+	#pragma omp task
 	init(u, v);
 	
 	// time-loop
@@ -123,18 +126,25 @@ int main(int argc, char** argv){
 		// track the time
 		t = dt*k;
 		// evaluate the PDE
+		#pragma omp task
 		dxdt(du, dv, u, v);
 		// update the state variables u,v
+		#pragma omp task
 		step(du, dv, u, v);
 		if (k%m == 0){
 			// calculate the norms
-			nrmu = norm(u, nrmx);
-			nrmv = norm(v, nrmx);
+			#pragma omp task
+			nrmu = norm(u);
+			#pragma omp task
+			nrmv = norm(v);
 			printf("t = %2.1f\tu-norm = %2.5f\tv-norm = %2.5f\n", t, nrmu, nrmv);
 			fprintf(fptr, "%f\t%f\t%f\n", t, nrmu, nrmv);
 		}
 	}
 	}
+	}
+
+	
 
 	
 	
