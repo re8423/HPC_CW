@@ -64,7 +64,7 @@ void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 }
 
 double norm(double x[N][N]){
-	double nrmx = 0.0;
+	
 	double nrmx_temp = 0.0;
 
 	#pragma omp for schedule( static )//reduction(+:nrmx)
@@ -88,9 +88,9 @@ int main(int argc, char** argv){
 	
 	// initialize the state
 	init(u, v);
-	
+	double nrmx = 0.0;
 	// time-loop
-	#pragma omp parallel shared( u, v , du, dv) //have to call reduction here but cant pass this to norm since cant change header file
+	#pragma omp parallel shared( u, v , du, dv, nrmx) //have to call reduction here but cant pass this to norm since cant change header file
 	for (int k=0; k < M; k++){
 		// track the time
 		t = dt*k;
