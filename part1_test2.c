@@ -53,6 +53,10 @@ for (int i = 0; i < M; i++){
     funcA(a,b,c);
     funcB(a,b,c);
     funcC(a,b,c);
+    if (i%m == 0){
+        funcC(a,b,c);
+        printf("%d\n", i);
+    }
 }
 // printf("%d", ans);
 
