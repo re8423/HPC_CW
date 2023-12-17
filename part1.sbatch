@@ -35,11 +35,11 @@ module load gcc
 # gcc -fopenmp -lm part1_test3.c -o part1_test3
 # OMP_NUM_THREADS=30 time ./part1_test3
 
-gcc -fopenmp -lm part1_test3.c -o part1_test3
-OMP_NUM_THREADS=40 time ./part1_test3
-
 # gcc -fopenmp -lm part1_test3.c -o part1_test3
-# OMP_NUM_THREADS=50 time ./part1_test3
+# OMP_NUM_THREADS=40 time ./part1_test3
+
+gcc -fopenmp -lm part1_test3.c -o part1_test3
+OMP_NUM_THREADS=50 time ./part1_test3
 
 # gcc -fopenmp -lm part1_test3.c -o part1_test3
 # OMP_NUM_THREADS=60 time ./part1_test3
