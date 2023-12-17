@@ -8,7 +8,7 @@ void init(double u[N][N], double v[N][N]){
 	uhi = 0.5; ulo = -0.5; vhi = 0.1; vlo = -0.1; // these are shared vars
 
 	//collapse wouldnt make difference if using 128 threads
-	#pragma omp parrallel for
+	#pragma omp parrallel for schedule( static )
 	for (int i=0; i < N; i++){ //vars declared in loop are private
 		for (int j=0; j < N; j++){
 			// u[i][j] = ulo + (uhi-ulo)*0.5*(1.0 + tanh((i-N/2)/16.0)); 
@@ -27,7 +27,7 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 	
 	double lapu, lapv;
 	int up, down, left, right;
-	#pragma omp for
+	#pragma omp for schedule( static )
 	for (int i = 0; i < N; i++){
 		for (int j = 0; j < N; j++){
 			if (i == 0){
@@ -67,7 +67,7 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 }
 
 void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
-	#pragma omp for
+	#pragma omp for schedule( static )
 	for (int i = 0; i < N; i++){
 		for (int j = 0; j < N; j++){
 			u[i][j] += dt*du[i][j];
@@ -83,7 +83,7 @@ double norm(double x[N][N]){
 	// #pragma omp parallel 
 	// {
 	int partialsum = 0; //partial sum is slow because you would need 128 different partial sums
-	#pragma omp for
+	#pragma omp for schedule( static )
 	for (int i = 0; i < N; i++){
 		for (int j = 0; j < N; j++){
 			partialsum += x[i][j]*x[i][j];
