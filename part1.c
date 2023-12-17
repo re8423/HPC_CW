@@ -67,7 +67,7 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 	#pragma omp parrallel
 	{
-		#pragma omp for schedule(static, 64) //64 seems to work best, why?
+		#pragma omp for  //64 seems to work best, why? schedule(static, 64)
 			for (int i = 0; i < N; i++){
 				for (int j = 0; j < N; j++){
 					u[i][j] += dt*du[i][j];
