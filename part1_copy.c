@@ -82,7 +82,7 @@ double norm(double x[N][N]){
 
 	// #pragma omp parallel 
 	// {
-	int partialsum = 0; #partial sum is slow because you would need 128 different partial sums
+	int partialsum = 0; //partial sum is slow because you would need 128 different partial sums
 	#pragma omp for
 	for (int i = 0; i < N; i++){
 		for (int j = 0; j < N; j++){
