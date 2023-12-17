@@ -42,7 +42,7 @@ int omp_thread_count() {
 
 int main(int argc, char** argv){
 double ans = 0;
-
+omp_set_num_threads(4)
 int a[N][N], c[N][N];
 int b;
 printf("This program uses %d threads.\n", omp_thread_count());
