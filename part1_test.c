@@ -43,14 +43,14 @@ void funcA(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]) {
     }
 }
 
-void funcB( double a[N][N], double c[N][N] ) {
+void funcB(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]) {
     #pragma omp for schedule( static )
-    for (int ii = 0; ii < N; ii++) {
-        for (int jj = 0; jj < N; jj++) {
-          a = a + 2;
-          c = c + 2;
-        }
-    }
+	for (int i = 0; i < N; i++){
+		for (int j = 0; j < N; j++){
+			u[i][j] += dt*du[i][j];
+			v[i][j] += dt*dv[i][j];
+		}
+	}
 }
 
 
@@ -99,7 +99,7 @@ init(u, v);
 #pragma omp parallel shared( u, v )
 for (int k = 0; k < M; k++){
     funcA(du, dv, u, v);;
-    funcB(u,v);
+    funcB(du, dv, u, v);
     
     if (k%m == 0){
         ans = funcC(u,v);
