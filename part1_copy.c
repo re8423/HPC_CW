@@ -76,7 +76,7 @@ void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 	}
 }
 
-double norm(double x[N][N]){
+double norm(double x[N][N], double nrmx){
 	
 	// #pragma omp parrallel for collapse(2)
 
@@ -127,8 +127,8 @@ int main(int argc, char** argv){
 		step(du, dv, u, v);
 		if (k%m == 0){
 			// calculate the norms
-			nrmu = norm(u);
-			nrmv = norm(v);
+			nrmu = norm(u, nrmx);
+			nrmv = norm(v, nrmx);
 			printf("t = %2.1f\tu-norm = %2.5f\tv-norm = %2.5f\n", t, nrmu, nrmv);
 			fprintf(fptr, "%f\t%f\t%f\n", t, nrmu, nrmv);
 		}
