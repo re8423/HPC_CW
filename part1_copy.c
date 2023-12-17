@@ -77,7 +77,7 @@ void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 }
 
 double norm(double x[N][N]){
-	double nrmx = 0.0;
+	
 	// #pragma omp parrallel for collapse(2)
 
 	// #pragma omp parallel 
@@ -112,7 +112,7 @@ int main(int argc, char** argv){
 	fprintf(fptr, "#t\t\tnrmu\t\tnrmv\n");
 	
 	// initialize the state
-
+	double nrmx = 0.0;
 	#pragma omp parrallel
 	{
 	init(u, v);
