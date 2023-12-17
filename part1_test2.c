@@ -99,6 +99,7 @@ int omp_thread_count() {
 
 int main(int argc, char** argv){
 double ans = 0;
+double t = 0.0, nrmu, nrmv;
 // omp_set_num_threads(4);
 double u[N][N], v[N][N], du[N][N], dv[N][N];
 int b=N;
@@ -109,12 +110,14 @@ init(u, v);
 #pragma omp parallel shared( u, b, v , du, dv)
 
 for (int i = 0; i < M; i++){
+    t = dt*i;
     funcA(u,b,v, du, dv);
     funcB(u,b,v, du, dv);
     if (i%m == 0){
-        ans = funcC(u);
-        ans = funcC(v);
-        printf("%d\t%f\n",i, ans);
+        nrmu = funcC(u);
+        nrmv = funcC(v);
+        // printf("%d\t%f\n",i, ans);
+        printf("t = %2.1f\tu-norm = %2.5f\tv-norm = %2.5f\n", t, nrmu, nrmv);
     }
 }
 // printf("%d", ans);

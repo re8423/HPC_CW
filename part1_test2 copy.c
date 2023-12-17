@@ -79,26 +79,15 @@ void funcB( double u[N][N], int b, double v[N][N], double du[N][N], double dv[N]
 //     }
 // }
 double funcC (double x[N][N]){
-    double nrmx = 0.0;
-    double partialsum = 0; //partial sum is slow because you would need 128 different partial sums
-	#pragma omp for schedule( static )
-	for (int i = 0; i < N; i++){
-		for (int j = 0; j < N; j++){
-			partialsum += x[i][j]*x[i][j];
-		}
-	}
-	#pragma omp atomic
-	nrmx += partialsum;
-    return nrmx;
-    // double k = 0;
-    // #pragma omp parallel for reduction(+:k)
-    // for (int ii = 0; ii < N; ii++){
-    //     for (int jj = 0; jj < N; jj++){
-    //       // alter values of a and c
-    //         k += x[ii][jj]*x[ii][jj];
-    // }
-    // }
-    // return k;
+    double k = 0;
+    #pragma omp parallel for reduction(+:k)
+    for (int ii = 0; ii < N; ii++){
+        for (int jj = 0; jj < N; jj++){
+          // alter values of a and c
+            k += x[ii][jj]*x[ii][jj];
+    }
+    }
+    return k;
 }
 
 int omp_thread_count() {
@@ -110,7 +99,6 @@ int omp_thread_count() {
 
 int main(int argc, char** argv){
 double ans = 0;
-double t = 0.0, nrmu, nrmv;
 // omp_set_num_threads(4);
 double u[N][N], v[N][N], du[N][N], dv[N][N];
 int b=N;
@@ -121,14 +109,12 @@ init(u, v);
 #pragma omp parallel shared( u, b, v , du, dv)
 
 for (int i = 0; i < M; i++){
-    t = dt*i;
     funcA(u,b,v, du, dv);
     funcB(u,b,v, du, dv);
     if (i%m == 0){
-        nrmu = funcC(u);
-        nrmv = funcC(v);
-        // printf("%d\t%f\n",i, ans);
-        printf("t = %2.1f\tu-norm = %2.5f\tv-norm = %2.5f\n", t, nrmu, nrmv);
+        ans = funcC(u);
+        ans = funcC(v);
+        printf("%d\t%f\n",i, ans);
     }
 }
 // printf("%d", ans);
