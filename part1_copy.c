@@ -24,9 +24,10 @@ void init(double u[N][N], double v[N][N]){
 void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // u,v are not being changed (no need for reduction)
 	
 	// #pragma omp parrallel for schedule(static, 128)
-	#pragma omp for
+	
 	double lapu, lapv;
 	int up, down, left, right;
+	#pragma omp for
 	for (int i = 0; i < N; i++){
 		for (int j = 0; j < N; j++){
 			if (i == 0){
@@ -66,13 +67,13 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 }
 
 void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
-		#pramga omp for
-		for (int i = 0; i < N; i++){
-			for (int j = 0; j < N; j++){
-				u[i][j] += dt*du[i][j];
-				v[i][j] += dt*dv[i][j];
-			}
+	#pragma omp for
+	for (int i = 0; i < N; i++){
+		for (int j = 0; j < N; j++){
+			u[i][j] += dt*du[i][j];
+			v[i][j] += dt*dv[i][j];
 		}
+	}
 }
 
 double norm(double x[N][N]){
