@@ -59,14 +59,14 @@ void funcA( double u[N][N], int b, double v[N][N], double du[N][N], double dv[N]
     }
 }
 
-void funcB( double u[N][N], int b, double v[N][N] ) {
+void funcB( double u[N][N], int b, double v[N][N], double du[N][N], double dv[N][N] ) {
     #pragma omp for schedule( static )
-    for (int ii = 0; ii < b; ii++) {
-        for (int jj = 0; jj < b; jj++) {
-          u[ii][jj] += 1;
-          v[ii][jj] += 1;
-        }
-    }
+	for (int i = 0; i < b; i++){
+		for (int j = 0; j < b; j++){
+			u[i][j] += dt*du[i][j];
+			v[i][j] += dt*dv[i][j];
+		}
+	}
 }
 
 // void funcC( int a[N][N], int b, int c[N][N] ) {

@@ -18,12 +18,43 @@ void init(double u[N][N], double v[N][N]){
 		}
 	}
 }
-void funcA( double u[N][N], int b, double v[N][N] ) {
+void funcA( double u[N][N], int b, double v[N][N], double du[N][N], double dv[N][N] ) {
+    double lapu, lapv;
+	int up, down, left, right;
+
     #pragma omp for schedule( static )
-    for (int ii = 0; ii < b; ii++) {
-        for (int jj = 0; jj < b; jj++) {
-          u[ii][jj] += 1;
-          v[ii][jj] += 1;
+    for (int i = 0; i < b; i++) {
+        for (int j = 0; j < b; j++) {
+            if (i == 0){
+                down = i;
+            }
+            else{
+                down = i-1;
+            }
+            if (i == N-1){
+                up = i;
+            }
+            else{
+                up = i+1;
+            }
+
+            if (j == 0){
+                left = j;
+            }
+            else{
+                left = j-1;
+            }
+
+            if (j == N-1){
+                right = j;
+            }
+            else{
+                right = j+1;
+            }
+        lapu = u[up][j] + u[down][j] + u[i][left] + u[i][right] + -4.0*u[i][j];
+        lapv = v[up][j] + v[down][j] + v[i][left] + v[i][right] + -4.0*v[i][j];
+        du[i][j] = DD*lapu + u[i][j]*(1.0 - u[i][j])*(u[i][j]-b) - v[i][j];
+        dv[i][j] = d*DD*lapv + c*(a*u[i][j] - v[i][j]);	
         }
     }
 }
@@ -69,16 +100,16 @@ int omp_thread_count() {
 int main(int argc, char** argv){
 double ans = 0;
 // omp_set_num_threads(4);
-double u[N][N], v[N][N];
+double u[N][N], v[N][N], du[N][N], dv[N][N];
 int b=N;
 printf("This program uses %d threads.\n", omp_thread_count());
 
 
 init(u, v);
-#pragma omp parallel shared( u, b, v )
+#pragma omp parallel shared( u, b, v , du, dv)
 
 for (int i = 0; i < M; i++){
-    funcA(u,b,v);
+    funcA(u,b,v, du, dv);
     funcB(u,b,v);
     if (i%m == 0){
         ans = funcC(u);
