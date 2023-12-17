@@ -3,22 +3,22 @@
 #include "params.h"				// model & simulation parameters
 #include <omp.h> //openmp header file
 
-void funcA( int a[N][N], int b, int c[N][N] ) {
+void funcA( double u[N][N], int b, double v[N][N] ) {
     #pragma omp for schedule( static )
     for (int ii = 0; ii < b; ii++) {
         for (int jj = 0; jj < b; jj++) {
-          a[ii][jj] += 1;
-          c[ii][jj] += 1;
+          u[ii][jj] += 1;
+          v[ii][jj] += 1;
         }
     }
 }
 
-void funcB( int a[N][N], int b, int c[N][N] ) {
+void funcB( double u[N][N], int b, double v[N][N] ) {
     #pragma omp for schedule( static )
     for (int ii = 0; ii < b; ii++) {
         for (int jj = 0; jj < b; jj++) {
-          a[ii][jj] += 1;
-          c[ii][jj] += 1;
+          u[ii][jj] += 1;
+          v[ii][jj] += 1;
         }
     }
 }
@@ -32,13 +32,13 @@ void funcB( int a[N][N], int b, int c[N][N] ) {
 //         }
 //     }
 // }
-double funcC (int a[N][N], int b, int c[N][N]){
+double funcC (double u[N][N], int b, double v[N][N]){
     double k = 0;
-    #pragma omp parallel for shared(a,b,c) reduction(+:k)
+    #pragma omp parallel for shared(u,b,v) reduction(+:k)
     for (int ii = 0; ii < b; ii++){
         for (int jj = 0; jj < b; jj++){
           // alter values of a and c
-            k += a[ii][jj]*c[ii][jj];
+            k += u[ii][jj]*v[ii][jj];
     }
     }
     return k;
@@ -54,18 +54,18 @@ int omp_thread_count() {
 int main(int argc, char** argv){
 double ans = 0;
 // omp_set_num_threads(4);
-int a[N][N], c[N][N];
+double u[N][N], v[N][N];
 int b=N;
 printf("This program uses %d threads.\n", omp_thread_count());
 
-#pragma omp parallel shared( a, b, c )
+#pragma omp parallel shared( u, b, v )
 
 for (int i = 0; i < M; i++){
-    funcA(a,b,c);
-    funcB(a,b,c);
-    ans = funcC(a,b,c);
+    funcA(u,b,v);
+    funcB(u,b,v);
+    ans = funcC(u,b,v);
     if (i%m == 0){
-        funcC(a,b,c);
+        funcC(u,b,v);
         printf("%d\t%f\n",i, ans);
     }
 }
