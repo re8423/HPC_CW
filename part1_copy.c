@@ -8,7 +8,7 @@ void init(double u[N][N], double v[N][N]){
 	uhi = 0.5; ulo = -0.5; vhi = 0.1; vlo = -0.1; // these are shared vars
 
 	//collapse wouldnt make difference if using 128 threads
-	#pragma parralell for
+	#pragma omp for
 	for (int i=0; i < N; i++){ //vars declared in loop are private
 		for (int j=0; j < N; j++){
 			// u[i][j] = ulo + (uhi-ulo)*0.5*(1.0 + tanh((i-N/2)/16.0)); 
@@ -82,7 +82,7 @@ double norm(double x[N][N]){
 
 	// #pragma omp parallel 
 	// {
-	int partialsum = 0; //partial sum is slow because you would need 128 different partial sums
+	int partialsum = 0; #partial sum is slow because you would need 128 different partial sums
 	#pragma omp for
 	for (int i = 0; i < N; i++){
 		for (int j = 0; j < N; j++){
@@ -113,40 +113,28 @@ int main(int argc, char** argv){
 	
 	// initialize the state
 
-	// #pragma omp task
-	init(u, v);
-
 	#pragma omp parrallel
 	{
-
+		
+	init(u, v);
+	
 	// time-loop
 	for (int k=0; k < M; k++){
 		// track the time
 		t = dt*k;
 		// evaluate the PDE
-		#pragma omp task
 		dxdt(du, dv, u, v);
 		// update the state variables u,v
-		#pragma omp task
 		step(du, dv, u, v);
 		if (k%m == 0){
 			// calculate the norms
-			#pragma omp task
 			nrmu = norm(u);
-			#pragma omp task
 			nrmv = norm(v);
-			#pragma omp task
-			{
-				printf("t = %2.1f\tu-norm = %2.5f\tv-norm = %2.5f\n", t, nrmu, nrmv);
-				fprintf(fptr, "%f\t%f\t%f\n", t, nrmu, nrmv);
-			}
-			
+			printf("t = %2.1f\tu-norm = %2.5f\tv-norm = %2.5f\n", t, nrmu, nrmv);
+			fprintf(fptr, "%f\t%f\t%f\n", t, nrmu, nrmv);
 		}
 	}
-	
 	}
-
-	
 
 	
 	
