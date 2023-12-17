@@ -37,7 +37,7 @@ double ans = 0;
 
 int a[N][N], c[N][N];
 int b;
-
+#pragma omp parallel shared( a, b, c )
 for (int i = 0; i < M; i++){
     funcA(a,b,c);
     funcB(a,b,c);
