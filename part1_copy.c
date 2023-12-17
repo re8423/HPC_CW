@@ -27,7 +27,7 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 	
 	double lapu, lapv;
 	int up, down, left, right;
-	#pragma omp taskloop
+	#pragma omp for
 	for (int i = 0; i < N; i++){
 		for (int j = 0; j < N; j++){
 			if (i == 0){
@@ -67,7 +67,7 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 }
 
 void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
-	#pragma omp taskloop
+	#pragma omp for
 	for (int i = 0; i < N; i++){
 		for (int j = 0; j < N; j++){
 			u[i][j] += dt*du[i][j];
@@ -83,7 +83,7 @@ double norm(double x[N][N]){
 	// #pragma omp parallel 
 	// {
 	int partialsum = 0; //partial sum is slow because you would need 128 different partial sums
-	#pragma omp taskloop
+	#pragma omp for
 	for (int i = 0; i < N; i++){
 		for (int j = 0; j < N; j++){
 			partialsum += x[i][j]*x[i][j];
@@ -119,9 +119,6 @@ int main(int argc, char** argv){
 	#pragma omp parrallel
 	{
 
-
-	
-	
 	// time-loop
 	for (int k=0; k < M; k++){
 		// track the time
