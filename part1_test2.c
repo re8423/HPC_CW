@@ -23,8 +23,8 @@ void funcA( double u[N][N], int b, double v[N][N] ) {
 	int up, down, left, right;
 
     #pragma omp for schedule( static )
-    for (int ii = 0; ii < b; ii++) {
-        for (int jj = 0; jj < b; jj++) {
+    for (int i = 0; i < b; i++) {
+        for (int j = 0; j < b; j++) {
             if (i == 0){
                 down = i;
             }
@@ -61,8 +61,8 @@ void funcA( double u[N][N], int b, double v[N][N] ) {
 
 void funcB( double u[N][N], int b, double v[N][N] ) {
     #pragma omp for schedule( static )
-    for (int i = 0; i < b; i++) {
-        for (int j = 0; j < b; j++) {
+    for (int ii = 0; ii < b; ii++) {
+        for (int jj = 0; jj < b; jj++) {
           u[ii][jj] += 1;
           v[ii][jj] += 1;
         }
