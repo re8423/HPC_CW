@@ -44,9 +44,9 @@ int b;
 for (int i = 0; i < M; i++){
     funcA(a,b,c);
     funcB(a,b,c);
-    ans = funcC(a,b,c);
+    funcC(a,b,c);
 }
-printf("%d", ans);
+// printf("%d", ans);
 
 
 return 0;
