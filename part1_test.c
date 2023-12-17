@@ -4,11 +4,41 @@
 #include <omp.h> //openmp header file
 
 void funcA( double a[N][N], int b, double c[N][N] ) {
+    double lapu, lapv;
+	int up, down, left, right;
     #pragma omp for schedule( static )
-    for (int ii = 0; ii < b; ii++) {
-        for (int jj = 0; jj < b; jj++) {
-          a = a + 1;
-          c = c + 1;
+    for (int i = 0; i < b; i++) {
+        for (int j = 0; j < b; j++) {
+          if (i == 0){
+            down = i;
+        }
+        else{
+            down = i-1;
+        }
+        if (i == N-1){
+            up = i;
+        }
+        else{
+            up = i+1;
+        }
+
+        if (j == 0){
+            left = j;
+        }
+        else{
+            left = j-1;
+        }
+
+        if (j == N-1){
+            right = j;
+        }
+        else{
+            right = j+1;
+        }
+    lapu = u[up][j] + u[down][j] + u[i][left] + u[i][right] + -4.0*u[i][j];
+    lapv = v[up][j] + v[down][j] + v[i][left] + v[i][right] + -4.0*v[i][j];
+    du[i][j] = DD*lapu + u[i][j]*(1.0 - u[i][j])*(u[i][j]-b) - v[i][j];
+    dv[i][j] = d*DD*lapv + c*(a*u[i][j] - v[i][j]);	
         }
     }
 }
@@ -72,8 +102,8 @@ for (int k = 0; k < M; k++){
     funcB(u,v);
     
     if (k%m == 0){
-        ans = funcC(u,b,v);
-        ans = funcC(u,b,v);
+        ans = funcC(u,v);
+        ans = funcC(u,v);
 
         // printf("t = %2.1d\tv-norm = %2.5f\n", i, ans);
     }
