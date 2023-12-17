@@ -116,8 +116,7 @@ int main(int argc, char** argv){
 	#pragma omp parrallel
 	{
 
-	#pragma omp single nowait
-	{
+
 	#pragma omp task
 	init(u, v);
 	
@@ -141,7 +140,7 @@ int main(int argc, char** argv){
 			fprintf(fptr, "%f\t%f\t%f\n", t, nrmu, nrmv);
 		}
 	}
-	}
+	
 	}
 
 	
