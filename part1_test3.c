@@ -102,6 +102,7 @@ int main(int argc, char** argv){
 		if (k%m == 0){
 			// calculate the norms
 			nrmu = norm(u);
+			nrmx = 0.0;
 			nrmv = norm(v);
 			printf("t = %2.1f\tu-norm = %2.5f\tv-norm = %2.5f\n", t, nrmu, nrmv);
 			fprintf(fptr, "%f\t%f\t%f\n", t, nrmu, nrmv);
