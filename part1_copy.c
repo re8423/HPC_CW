@@ -82,23 +82,23 @@ double norm(double x[N][N]){
 
 	// #pragma omp parallel 
 	// {
-	// int partialsum = 0; //partial sum is slow because you would need 128 different partial sums
-	// #pragma omp for
-	// for (int i = 0; i < N; i++){
-	// 	for (int j = 0; j < N; j++){
-	// 		partialsum += x[i][j]*x[i][j];
-	// 	}
-	// }
-	// #pragma omp atomic
-	// nrmx += partialsum;
-	// // }
-
-	// #pragma omp for reduction(+:nrmx) schedule(static)
+	int partialsum = 0; //partial sum is slow because you would need 128 different partial sums
+	#pragma omp for
 	for (int i = 0; i < N; i++){
 		for (int j = 0; j < N; j++){
-			nrmx += x[i][j]*x[i][j];
+			partialsum += x[i][j]*x[i][j];
 		}
 	}
+	#pragma omp atomic
+	nrmx += partialsum;
+	// }
+
+	// #pragma omp for reduction(+:nrmx) schedule(static)
+	// for (int i = 0; i < N; i++){
+	// 	for (int j = 0; j < N; j++){
+	// 		nrmx += x[i][j]*x[i][j];
+	// 	}
+	// }
 
 	return nrmx;
 }
@@ -115,7 +115,7 @@ int main(int argc, char** argv){
 
 	init(u, v);
 	// time-loop
-	#pragma omp parrallel
+	#pragma omp parrallel default(shared)
 	for (int k=0; k < M; k++){
 		// track the time
 		t = dt*k;
