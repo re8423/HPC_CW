@@ -26,7 +26,7 @@ void funcB( int* a, int b, int* c ) {
 
 double funcC (int* a, int b, int* c){
     double k = 0;
-#pragma omp parallel for shared(a,b,c) reduction(+:k)
+    #pragma omp parallel for shared(a,b,c) reduction(+:k)
     for (int ii = 0; ii < b; ii++){
         for (int jj = 0; jj < b; jj++){
           // alter values of a and c
@@ -49,5 +49,5 @@ for (int i = 0; i < 4000; i++){
     ans = funcC(a,b,c);
 }
 prinft(ans);
-
+return 0;
 }
