@@ -7,7 +7,8 @@ void funcA( int a, int b, int c ) {
     #pragma omp for schedule( static )
     for (int ii = 0; ii < b; ii++) {
         for (int jj = 0; jj < b; jj++) {
-          \\ alter values of a and c
+          a[ii][jj] += 1;
+          c[ii][jj] += 1;
         }
     }
 }
@@ -16,7 +17,8 @@ void funcB( int a, int b, int c ) {
     #pragma omp for schedule( static )
     for (int ii = 0; ii < b; ii++) {
         for (int jj = 0; jj < b; jj++) {
-          \\ alter values of a and c
+          a[ii][jj] += 1;
+          c[ii][jj] += 1;
         }
     }
 }
@@ -25,7 +27,8 @@ void funcC( int a, int b, int c ) {
     #pragma omp for schedule( static )
     for (int ii = 0; ii < b; ii++) {
         for (int jj = 0; jj < b; jj++) {
-          \\ alter values of a and c
+          a[ii][jj] += 1;
+          c[ii][jj] += 1;
         }
     }
 }
