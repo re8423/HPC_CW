@@ -8,6 +8,7 @@ void init(double u[N][N], double v[N][N]){
 	uhi = 0.5; ulo = -0.5; vhi = 0.1; vlo = -0.1; // these are shared vars
 
 	//collapse wouldnt make difference if using 128 threads
+	#pragma omp for
 	for (int i=0; i < N; i++){ //vars declared in loop are private
 		for (int j=0; j < N; j++){
 			// u[i][j] = ulo + (uhi-ulo)*0.5*(1.0 + tanh((i-N/2)/16.0)); 
@@ -23,6 +24,7 @@ void init(double u[N][N], double v[N][N]){
 void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // u,v are not being changed (no need for reduction)
 	
 	// #pragma omp parrallel for schedule(static, 128)
+	#pragma omp for
 	double lapu, lapv;
 	int up, down, left, right;
 	for (int i = 0; i < N; i++){
@@ -64,6 +66,7 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){ // 
 }
 
 void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
+		#pramga omp for
 		for (int i = 0; i < N; i++){
 			for (int j = 0; j < N; j++){
 				u[i][j] += dt*du[i][j];
@@ -89,7 +92,7 @@ double norm(double x[N][N]){
 	// 	nrmx += partialsum;
 	// }
 
-	#pragma omp parrallel for reduction(+:nrmx) schedule(static)
+	#pragma omp for reduction(+:nrmx) schedule(static)
 	for (int i = 0; i < N; i++){
 		for (int j = 0; j < N; j++){
 			nrmx += x[i][j]*x[i][j];
@@ -108,6 +111,9 @@ int main(int argc, char** argv){
 	fprintf(fptr, "#t\t\tnrmu\t\tnrmv\n");
 	
 	// initialize the state
+
+	#pragma omp parrallel
+	{
 	init(u, v);
 	
 	// time-loop
@@ -126,6 +132,9 @@ int main(int argc, char** argv){
 			fprintf(fptr, "%f\t%f\t%f\n", t, nrmu, nrmv);
 		}
 	}
+	}
+
+	
 	
 	fclose(fptr);
 	return 0;
