@@ -71,7 +71,7 @@ for (int k = 0; k < M; k++){
     funcA(u,b,v);
     funcB(u,b,v);
     
-    if (i%m == 0){
+    if (k%m == 0){
         ans = funcC(u,b,v);
         ans = funcC(u,b,v);
 
