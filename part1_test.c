@@ -44,7 +44,7 @@ int b = N;
 double ans = 0;
 
 #pragma omp parallel shared( a, b, c )
-for (int i = 0; i < 4000; i++){
+for (int i = 0; i < M; i++){
     funcA(a,b,c);
     funcB(a,b,c);
     ans = funcC(a,b,c);
