@@ -3,7 +3,7 @@
 #include "params.h"				// model & simulation parameters
 #include <omp.h> //openmp header file
 
-void funcA( int a, int b, int c ) {
+void funcA( int a[N][N], int b, int c[N][N] ) {
     #pragma omp for schedule( static )
     for (int ii = 0; ii < b; ii++) {
         for (int jj = 0; jj < b; jj++) {
@@ -13,7 +13,7 @@ void funcA( int a, int b, int c ) {
     }
 }
 
-void funcB( int a, int b, int c ) {
+void funcB( int a[N][N], int b, int c[N][N] ) {
     #pragma omp for schedule( static )
     for (int ii = 0; ii < b; ii++) {
         for (int jj = 0; jj < b; jj++) {
@@ -24,7 +24,7 @@ void funcB( int a, int b, int c ) {
 }
 
 
-double funcC (int a, int b, int c){
+double funcC (int a[N][N], int b, int c[N][N]){
     double k = 0;
     #pragma omp parallel for shared(a,b,c) reduction(+:k)
     for (int ii = 0; ii < b; ii++){
@@ -49,6 +49,6 @@ for (int i = 0; i < 4000; i++){
     funcB(a,b,c);
     ans = funcC(a,b,c);
 }
-prinft(ans);
+printf(ans);
 return 0;
 }
