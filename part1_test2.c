@@ -33,14 +33,22 @@ void funcC( int a[N][N], int b, int c[N][N] ) {
     }
 }
 
-
+int omp_thread_count() {
+    int n = 0;
+    #pragma omp parallel reduction(+:n)
+    n += 1;
+    return n;
+}
 
 int main(int argc, char** argv){
 double ans = 0;
 
 int a[N][N], c[N][N];
 int b;
+printf("This program uses %d threads.\n", omp_thread_count());
+
 #pragma omp parallel shared( a, b, c )
+
 for (int i = 0; i < M; i++){
     funcA(a,b,c);
     funcB(a,b,c);
