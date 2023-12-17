@@ -8,7 +8,7 @@ void init(double u[N][N], double v[N][N]){
 	uhi = 0.5; ulo = -0.5; vhi = 0.1; vlo = -0.1; // these are shared vars
 
 	//collapse wouldnt make difference if using 128 threads
-	#pragma omp taskloop
+	#pragma parralell for
 	for (int i=0; i < N; i++){ //vars declared in loop are private
 		for (int j=0; j < N; j++){
 			// u[i][j] = ulo + (uhi-ulo)*0.5*(1.0 + tanh((i-N/2)/16.0)); 
@@ -113,12 +113,14 @@ int main(int argc, char** argv){
 	
 	// initialize the state
 
+	// #pragma omp task
+	init(u, v);
+
 	#pragma omp parrallel
 	{
 
 
-	#pragma omp task
-	init(u, v);
+	
 	
 	// time-loop
 	for (int k=0; k < M; k++){
