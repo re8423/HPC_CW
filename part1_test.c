@@ -57,19 +57,19 @@ void init(double u[N][N], double v[N][N]){
 
 int main(int argc, char** argv){
 
-// double t = 0.0, nrmu, nrmv;
-// double u[N][N], v[N][N], du[N][N], dv[N][N];
+double t = 0.0, nrmu, nrmv;
+double u[N][N], v[N][N], du[N][N], dv[N][N];
 
-double u[N][N], v[N][N];
-int b = N;
-double ans = 0;
+// double u[N][N], v[N][N];
+// int b = N;
+// double ans = 0;
 init(u, v);
 
 
-#pragma omp parallel shared( u, b, v )
+#pragma omp parallel shared( u, v )
 for (int k = 0; k < M; k++){
-    funcA(u,b,v);
-    funcB(u,b,v);
+    funcA(u,v);
+    funcB(u,v);
     
     if (k%m == 0){
         ans = funcC(u,b,v);
