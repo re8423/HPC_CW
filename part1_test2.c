@@ -32,13 +32,13 @@ void funcB( double u[N][N], int b, double v[N][N] ) {
 //         }
 //     }
 // }
-double funcC (double u[N][N], int b, double v[N][N]){
+double funcC (double x[N][N]){
     double k = 0;
-    #pragma omp parallel for shared(u,b,v) reduction(+:k)
-    for (int ii = 0; ii < b; ii++){
-        for (int jj = 0; jj < b; jj++){
+    #pragma omp parallel for reduction(+:k)
+    for (int ii = 0; ii < N; ii++){
+        for (int jj = 0; jj < N; jj++){
           // alter values of a and c
-            k += u[ii][jj]*v[ii][jj];
+            k += x[ii][jj]*x[ii][jj];
     }
     }
     return k;
