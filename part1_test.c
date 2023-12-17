@@ -36,45 +36,23 @@ double funcC (int a[N][N], int b, int c[N][N]){
     return k;
 }
 
-void init(double u[N][N], double v[N][N]){
-	double uhi, ulo, vhi, vlo;
-	uhi = 0.5; ulo = -0.5; vhi = 0.1; vlo = -0.1; // these are shared vars
-
-	//collapse wouldnt make difference if using 128 threads
-	#pragma omp parrallel for schedule( static )
-	for (int i=0; i < N; i++){ //vars declared in loop are private
-		for (int j=0; j < N; j++){
-			// u[i][j] = ulo + (uhi-ulo)*0.5*(1.0 + tanh((i-N/2)/16.0)); 
-			// v[i][j] = vlo + (vhi-vlo)*0.5*(1.0 + tanh((j-N/2)/16.0));
-			u[i][j] = ulo + (uhi-ulo)*0.5*(1.0 + tanh((i-N/2)*0.0625)); 
-			v[i][j] = vlo + (vhi-vlo)*0.5*(1.0 + tanh((j-N/2)*0.0625));
-		}
-	}
-	
-	
-}
-
 
 int main(int argc, char** argv){
 
-int u[N][N], v[N][N];
+int a[N][N], c[N][N];
 int b = N;
 double ans = 0;
 
-
-
-#pragma omp parallel shared( u, b, v )
+#pragma omp parallel shared( a, b, c )
 for (int i = 0; i < M; i++){
-    funcA(u,b,v);
-    funcB(u,b,v);
+    funcA(a,b,c);
+    funcB(a,b,c);
     
     if (i%m == 0){
-        ans = funcC(u,b,v);
-        ans = funcC(u,b,v);
-
-        // printf("t = %2.1d\tv-norm = %2.5f\n", i, ans);
+    ans = funcC(a,b,c);
+    // printf("t = %2.1d\tv-norm = %2.5f\n", i, ans);
     }
 }
-printf("%d",ans);
+// printf("%d",ans);
 return 0;
 }
