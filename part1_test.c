@@ -3,67 +3,37 @@
 #include "params.h"				// model & simulation parameters
 #include <omp.h> //openmp header file
 
-void funcA(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]) {
-    double lapu, lapv;
-	int up, down, left, right;
+void funcA( int a[N][N], int b, int c[N][N] ) {
     #pragma omp for schedule( static )
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-          if (i == 0){
-            down = i;
-        }
-        else{
-            down = i-1;
-        }
-        if (i == N-1){
-            up = i;
-        }
-        else{
-            up = i+1;
-        }
-
-        if (j == 0){
-            left = j;
-        }
-        else{
-            left = j-1;
-        }
-
-        if (j == N-1){
-            right = j;
-        }
-        else{
-            right = j+1;
-        }
-    lapu = u[up][j] + u[down][j] + u[i][left] + u[i][right] + -4.0*u[i][j];
-    lapv = v[up][j] + v[down][j] + v[i][left] + v[i][right] + -4.0*v[i][j];
-    du[i][j] = DD*lapu + u[i][j]*(1.0 - u[i][j])*(u[i][j]-b) - v[i][j];
-    dv[i][j] = d*DD*lapv + c*(a*u[i][j] - v[i][j]);	
+    for (int ii = 0; ii < b; ii++) {
+        for (int jj = 0; jj < b; jj++) {
+          a = a + 1;
+          c = c + 1;
         }
     }
 }
 
-void funcB(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]) {
+void funcB( int a[N][N], int b, int c[N][N] ) {
     #pragma omp for schedule( static )
-	for (int i = 0; i < N; i++){
-		for (int j = 0; j < N; j++){
-			u[i][j] += dt*du[i][j];
-			v[i][j] += dt*dv[i][j];
-		}
-	}
+    for (int ii = 0; ii < b; ii++) {
+        for (int jj = 0; jj < b; jj++) {
+          a = a + 2;
+          c = c + 2;
+        }
+    }
 }
 
 
-double funcC (double a[N][N], double c[N][N]){
-    double nrxw = 0;
-    #pragma omp parallel for shared(a,c) reduction(+:nrxw)
-    for (int ii = 0; ii < N; ii++){
-        for (int jj = 0; jj < N; jj++){
+double funcC (int a[N][N], int b, int c[N][N]){
+    double k = 0;
+    #pragma omp parallel for shared(a,b,c) reduction(+:k)
+    for (int ii = 0; ii < b; ii++){
+        for (int jj = 0; jj < b; jj++){
           // alter values of a and c
-            nrxw += a[ii][jj]*c[ii][jj];
+            k += a[ii][jj]*c[ii][jj];
     }
     }
-    return nrxw;
+    return k;
 }
 
 void init(double u[N][N], double v[N][N]){
@@ -87,23 +57,20 @@ void init(double u[N][N], double v[N][N]){
 
 int main(int argc, char** argv){
 
-double t = 0.0, nrmu, nrmv;
-double u[N][N], v[N][N], du[N][N], dv[N][N];
-
-// double u[N][N], v[N][N];
-// int b = N;
+int u[N][N], v[N][N];
+int b = N;
 double ans = 0;
-init(u, v);
 
 
-#pragma omp parallel shared( u, v )
-for (int k = 0; k < M; k++){
-    funcA(du, dv, u, v);;
-    funcB(du, dv, u, v);
+
+#pragma omp parallel shared( u, b, v )
+for (int i = 0; i < M; i++){
+    funcA(u,b,v);
+    funcB(u,b,v);
     
-    if (k%m == 0){
-        ans = funcC(u,v);
-        ans = funcC(u,v);
+    if (i%m == 0){
+        ans = funcC(u,b,v);
+        ans = funcC(u,b,v);
 
         // printf("t = %2.1d\tv-norm = %2.5f\n", i, ans);
     }
