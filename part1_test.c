@@ -44,11 +44,15 @@ int b = N;
 double ans = 0;
 
 #pragma omp parallel shared( a, b, c )
-for (int i = 0; i < 4000; i++){
+for (int i = 0; i < M; i++){
     funcA(a,b,c);
     funcB(a,b,c);
+    
+    if (i%m == 0){
     ans = funcC(a,b,c);
+    printf("%d",ans);
+    }
 }
-printf("%d",ans);
+// printf("%d",ans);
 return 0;
 }
