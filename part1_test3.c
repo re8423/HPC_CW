@@ -64,7 +64,7 @@ void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 }
 
 double norm(double x[N][N]){
-	
+	extern double nrmx;
 	double nrmx_temp = 0.0;
 
 	#pragma omp for schedule( static )//reduction(+:nrmx)
