@@ -110,7 +110,7 @@ init(u, v);
 
 for (int i = 0; i < M; i++){
     funcA(u,b,v, du, dv);
-    funcB(u,b,v);
+    funcB(u,b,v, du, dv);
     if (i%m == 0){
         ans = funcC(u);
         ans = funcC(v);
