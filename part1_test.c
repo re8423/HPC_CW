@@ -21,7 +21,7 @@ void init(double a[N][N], double c[N][N]){
 	
 }
 
-void funcA( int a[N][N], int b, int c[N][N] ) {
+void funcA( double a[N][N], int b, double c[N][N] ) {
     #pragma omp for schedule( static )
     for (int ii = 0; ii < b; ii++) {
         for (int jj = 0; jj < b; jj++) {
@@ -31,7 +31,7 @@ void funcA( int a[N][N], int b, int c[N][N] ) {
     }
 }
 
-void funcB( int a[N][N], int b, int c[N][N] ) {
+void funcB( double a[N][N], int b, double c[N][N] ) {
     #pragma omp for schedule( static )
     for (int ii = 0; ii < b; ii++) {
         for (int jj = 0; jj < b; jj++) {
@@ -42,7 +42,7 @@ void funcB( int a[N][N], int b, int c[N][N] ) {
 }
 
 
-double funcC (int a[N][N], int b, int c[N][N]){
+double funcC (double a[N][N], int b, double c[N][N]){
     double k = 0;
     #pragma omp parallel for shared(a,b,c) reduction(+:k)
     for (int ii = 0; ii < b; ii++){
@@ -57,7 +57,7 @@ double funcC (int a[N][N], int b, int c[N][N]){
 
 int main(int argc, char** argv){
 
-int a[N][N], c[N][N];
+double a[N][N], c[N][N];
 int b = N;
 double ans = 0;
 init(a, c);
