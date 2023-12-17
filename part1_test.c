@@ -69,11 +69,12 @@ for (int i = 0; i < M; i++){
     funcB(u,b,v);
     
     if (i%m == 0){
-    ans = funcC(u,b,v);
-    ans = funcC(u,b,v);
-    printf("t = %2.1d\tv-norm = %2.5f\n", i, ans);
+        ans = funcC(u,b,v);
+        ans = funcC(u,b,v);
+
+        // printf("t = %2.1d\tv-norm = %2.5f\n", i, ans);
     }
 }
-// printf("%d",ans);
+printf("%d",ans);
 return 0;
 }
