@@ -67,16 +67,24 @@ double nrmx = 0.0;
 
 double norm(double x[N][N]){
 	nrmx = 0.0;
-	double nrmx_temp = 0.0;
-
-	#pragma omp for schedule( static )//reduction(+:nrmx)
+	#pragma omp for reduction(+:nrmx) schedule(static)
 	for (int i = 0; i < N; i++){
 		for (int j = 0; j < N; j++){
-			nrmx_temp += x[i][j]*x[i][j];
+			nrmx += x[i][j]*x[i][j];
 		}
 	}
-	#pragma omp atomic
-	nrmx += nrmx_temp;
+	// double nrmx_temp = 0.0;
+
+	// #pragma omp for schedule( static )//reduction(+:nrmx)
+	// for (int i = 0; i < N; i++){
+	// 	for (int j = 0; j < N; j++){
+	// 		nrmx_temp += x[i][j]*x[i][j];
+	// 	}
+	// }
+	// #pragma omp atomic
+	// nrmx += nrmx_temp;
+
+
 	return nrmx;
 }
 
@@ -102,7 +110,6 @@ int main(int argc, char** argv){
 		if (k%m == 0){
 			// calculate the norms
 			nrmu = norm(u);
-			nrmx = 0.0;
 			nrmv = norm(v);
 			printf("t = %2.1f\tu-norm = %2.5f\tv-norm = %2.5f\n", t, nrmu, nrmv);
 			fprintf(fptr, "%f\t%f\t%f\n", t, nrmu, nrmv);
