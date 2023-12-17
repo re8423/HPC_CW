@@ -49,6 +49,6 @@ for (int i = 0; i < 4000; i++){
     funcB(a,b,c);
     ans = funcC(a,b,c);
 }
-prinft(ans);
+printf(ans);
 return 0;
 }
