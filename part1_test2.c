@@ -81,8 +81,6 @@ double funcC (double x[N][N]){
 	#pragma omp atomic
 	nrmx += partialsum;
     return nrmx;
-
-
 }
     // double k = 0;
     // #pragma omp parallel for reduction(+:k)
@@ -93,7 +91,7 @@ double funcC (double x[N][N]){
     // }
     // }
     // return k;
-}
+
 
 int omp_thread_count() {
     int n = 0;
