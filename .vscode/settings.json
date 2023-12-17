@@ -2,6 +2,7 @@
     "files.associations": {
         "ios": "c",
         "queue": "c",
-        "random": "c"
+        "random": "c",
+        "params.h": "c"
     }
 }
