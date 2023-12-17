@@ -63,9 +63,9 @@ printf("This program uses %d threads.\n", omp_thread_count());
 for (int i = 0; i < M; i++){
     funcA(u,b,v);
     funcB(u,b,v);
-    ans = funcC(u,b,v);
     if (i%m == 0){
-        funcC(u,b,v);
+        ans = funcC(u);
+        ans = funcC(v);
         printf("%d\t%f\n",i, ans);
     }
 }
