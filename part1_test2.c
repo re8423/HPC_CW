@@ -18,7 +18,7 @@ void init(double u[N][N], double v[N][N]){
 		}
 	}
 }
-void funcA( double u[N][N], int b, double v[N][N] ) {
+void funcA( double u[N][N], int b, double v[N][N], double du[N][N], double dv[N][N] ) {
     double lapu, lapv;
 	int up, down, left, right;
 
@@ -109,7 +109,7 @@ init(u, v);
 #pragma omp parallel shared( u, b, v , du, dv)
 
 for (int i = 0; i < M; i++){
-    funcA(u,b,v);
+    funcA(u,b,v, du, dv);
     funcB(u,b,v);
     if (i%m == 0){
         ans = funcC(u);
