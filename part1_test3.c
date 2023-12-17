@@ -81,7 +81,7 @@ double norm(double x[N][N]){
 	}
 	#pragma omp atomic
 	nrmx += nrmx_temp;
-
+	#pragma omp barrier
 
 	return nrmx;
 }

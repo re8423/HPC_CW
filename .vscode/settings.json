@@ -3,6 +3,7 @@
         "ios": "c",
         "queue": "c",
         "random": "c",
-        "params.h": "c"
+        "params.h": "c",
+        "atomic": "c"
     }
 }
