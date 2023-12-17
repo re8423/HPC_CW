@@ -65,7 +65,7 @@ void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 
 double norm(double x[N][N], double nrmx){
 	
-	#pragma omp for reduction(+:nrmx)
+	#pragma omp for 
 	for (int i = 0; i < N; i++){
 		for (int j = 0; j < N; j++){
 			nrmx += x[i][j]*x[i][j];
@@ -86,7 +86,7 @@ int main(int argc, char** argv){
 	init(u, v);
 	double nrmx = 0.0;
 	// time-loop
-	#pragma omp parallel shared( u, v , du, dv)
+	#pragma omp parallel shared( u, v , du, dv) reduction(+:nrmx)
 	for (int k=0; k < M; k++){
 		// track the time
 		t = dt*k;
