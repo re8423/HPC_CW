@@ -72,7 +72,6 @@ for (int i = 0; i < M; i++){
     ans = funcC(u,b,v);
     ans = funcC(u,b,v);
     printf("t = %2.1d\tv-norm = %2.5f\n", i, ans);
-    fprintf(fptr, "%d\t%f\n", i, ans);
     }
 }
 // printf("%d",ans);
