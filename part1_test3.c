@@ -79,6 +79,7 @@ double norm(double x[N][N]){
 		}
 	}
 	#pragma omp atomic
+	fjfjfj
 	nrmx += nrmx_temp;
 	return nrmx;
 }
