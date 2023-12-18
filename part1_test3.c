@@ -65,15 +65,10 @@ void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 double nrmx = 0.0;
 double norm(double x[N][N]){
 	nrmx = 0.0;
-	// #pragma omp for schedule(static)
-	// for (int i = 0; i < N; i++){
-	// 	for (int j = 0; j < N; j++){
-	// 		nrmx += x[i][j]*x[i][j];
-	// 	}
-	// }
+
 	double nrmx_temp = 0.0;
 
-	#pragma omp for schedule( static )//reduction(+:nrmx)
+	#pragma omp for schedule( static )
 	for (int i = 0; i < N; i++){
 		for (int j = 0; j < N; j++){
 			nrmx_temp += x[i][j]*x[i][j];
@@ -103,6 +98,7 @@ int main(int argc, char** argv){
 		t = dt*k;
 		// evaluate the PDE
 		dxdt(du, dv, u, v);
+		#pragma omp barrier
 		// update the state variables u,v
 		step(du, dv, u, v);
 		if (k%m == 0){
