@@ -95,7 +95,7 @@ int main(int argc, char** argv){
 	// initialize the state
 	init(u, v);
 	// time-loop
-	#pragma omp parallel shared( u, v , du, dv) //have to call reduction here but cant pass this to norm since cant change header file
+	#pragma omp parallel shared( u, v , du, dv, nrmx) //have to call reduction here but cant pass this to norm since cant change header file
 	
 	// double nrmx = 0.0;
 	for (int k=0; k < M; k++){
