@@ -43,7 +43,7 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 
 	//Send right
 	if(rank<size-1){
-		for(i=0; i<N; i++){
+		for(int i=0; i<N; i++){
 			du_edge[i] = du[i][j_last];
 			dv_edge[i] = dv[i][j_last];
 		}
@@ -57,14 +57,14 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 		printf("Recieving column %d from rank %d to rank %d\n", j_first-1, rank-1, rank);
 		MPI_Recv(du_edge, N, MPI_DOUBLE, rank-1, 0, MPI_COMM_WORLD,&status);
 		MPI_Recv(dv_edge, N, MPI_DOUBLE, rank-1, 0, MPI_COMM_WORLD,&status);
-		for(i=0; i<N; i++){
+		for(int i=0; i<N; i++){
 			du[i][j_first-1] = du_edge[i];
 			dv[i][j_first-1] = dv_edge[i];
 		}
 	}
 	//Send left
 	if (rank>0){
-		for(i=0; i<N; i++){
+		for(int i=0; i<N; i++){
 			du_edge[i] = du[i][j_first];
 			dv_edge[i] = dv[i][j_first];
 		}
@@ -78,7 +78,7 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 		printf("Recieving column %d from rank %d to rank %d\n", j_last+1, rank+1, rank);
 		MPI_Recv( du_edge, N, MPI_DOUBLE, rank + 1, 1, MPI_COMM_WORLD, &status );
 		MPI_Recv( dv_edge, N, MPI_DOUBLE, rank + 1, 1, MPI_COMM_WORLD, &status );
-		for(i=0; i<N; i++){
+		for(int i=0; i<N; i++){
 			du[i][j_last+1] = du_edge[i];
 			dv[i][j_last+1] = dv_edge[i];
 		}
@@ -133,7 +133,7 @@ void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 
 	//Send right
 	if(rank<size-1){
-		for(i=0; i<N; i++){
+		for(int i=0; i<N; i++){
 			u_edge[i] = u[i][j_last];
 			v_edge[i] = v[i][j_last];
 		}
@@ -147,14 +147,14 @@ void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 		printf("Recieving column %d from rank %d to rank %d\n", j_first-1, rank-1, rank);
 		MPI_Recv(u_edge, N, MPI_DOUBLE, rank-1, 0, MPI_COMM_WORLD,&status);
 		MPI_Recv(v_edge, N, MPI_DOUBLE, rank-1, 0, MPI_COMM_WORLD,&status);
-		for(i=0; i<N; i++){
+		for(int i=0; i<N; i++){
 			u[i][j_first-1] = u_edge[i];
 			v[i][j_first-1] = v_edge[i];
 		}
 	}
 	//Send left
 	if (rank>0){
-		for(i=0; i<N; i++){
+		for(int i=0; i<N; i++){
 			u_edge[i] = u[i][j_first];
 			v_edge[i] = v[i][j_first];
 		}
@@ -168,7 +168,7 @@ void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 		printf("Recieving column %d from rank %d to rank %d\n", j_last+1, rank+1, rank);
 		MPI_Recv( u_edge, N, MPI_DOUBLE, rank + 1, 1, MPI_COMM_WORLD, &status );
 		MPI_Recv( v_edge, N, MPI_DOUBLE, rank + 1, 1, MPI_COMM_WORLD, &status );
-		for(i=0; i<N; i++){
+		for(int i=0; i<N; i++){
 			u[i][j_last+1] = u_edge[i];
 			v[i][j_last+1] = v_edge[i];
 		}
@@ -204,17 +204,18 @@ double norm(double x[N][N]){
 	return nrmx;
 }
 int rank, size;
+MPI_Status status;
+MPI_Init( &argc, &argv );
+
+MPI_Comm_rank( MPI_COMM_WORLD, &rank );
+MPI_Comm_size( MPI_COMM_WORLD, &size );
 int main(int argc, char** argv){
 	
 	double t = 0.0, nrmu, nrmv, gnrmu, gnrmv;
 	double u[N][(N/4)+2], v[N][(N/4)+2], du[N][(N/4)+2], dv[N][(N/4)+2];
 
 	
-	MPI_Status status;
-	MPI_Init( &argc, &argv );
-
-    MPI_Comm_rank( MPI_COMM_WORLD, &rank );
-    MPI_Comm_size( MPI_COMM_WORLD, &size );
+	
 	
 	FILE *fptr = fopen("nrms.txt", "w");
 	fprintf(fptr, "#t\t\tnrmu\t\tnrmv\n");
