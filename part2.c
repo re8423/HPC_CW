@@ -32,6 +32,9 @@ void init(double u[N][N], double v[N][N]){
 void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 	double lapu, lapv;
 	int up, down, left, right;
+	int rank, size;
+	MPI_Comm_rank( MPI_COMM_WORLD, &rank );
+    MPI_Comm_size( MPI_COMM_WORLD, &size );
 
 	double du_edge[N+2], dv_edge[N+2];
 	int j_first, j_last;
@@ -122,7 +125,9 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 }
 
 void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
-
+	int rank, size;
+	MPI_Comm_rank( MPI_COMM_WORLD, &rank );
+    MPI_Comm_size( MPI_COMM_WORLD, &size );
 	double u_edge[N+2], v_edge[N+2];
 	int j_first, j_last;
 	j_first = 1;
@@ -188,6 +193,9 @@ void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 }
 
 double norm(double x[N][N]){
+	int rank, size;
+	MPI_Comm_rank( MPI_COMM_WORLD, &rank );
+    MPI_Comm_size( MPI_COMM_WORLD, &size );
 	double nrmx = 0.0;
 	int j_first, j_last;
 	j_first = 1;
