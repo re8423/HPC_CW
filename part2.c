@@ -4,7 +4,7 @@
 #include "mpi.h"
 
 void init(double u[N][N], double v[N][N]){
-
+	int rank, size;
 	MPI_Comm_rank( MPI_COMM_WORLD, &rank );
     MPI_Comm_size( MPI_COMM_WORLD, &size );
 	double uhi, ulo, vhi, vlo;
@@ -206,7 +206,7 @@ double norm(double x[N][N]){
 	}
 	return nrmx;
 }
-int rank, size;
+
 int main(int argc, char** argv){
 	
 	double t = 0.0, nrmu, nrmv, gnrmu, gnrmv;
