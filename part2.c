@@ -7,6 +7,8 @@ void init(double u[N][N], double v[N][N]){
 	int rank, size;
 	MPI_Comm_rank( MPI_COMM_WORLD, &rank );
     MPI_Comm_size( MPI_COMM_WORLD, &size );
+	MPI_Status status;
+
 	double uhi, ulo, vhi, vlo;
 	uhi = 0.5; ulo = -0.5; vhi = 0.1; vlo = -0.1;
 
@@ -35,6 +37,8 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 	int rank, size;
 	MPI_Comm_rank( MPI_COMM_WORLD, &rank );
     MPI_Comm_size( MPI_COMM_WORLD, &size );
+	MPI_Status status;
+
 
 	double du_edge[N+2], dv_edge[N+2];
 	int j_first, j_last;
@@ -128,6 +132,8 @@ void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 	int rank, size;
 	MPI_Comm_rank( MPI_COMM_WORLD, &rank );
     MPI_Comm_size( MPI_COMM_WORLD, &size );
+	MPI_Status status;
+
 	double u_edge[N+2], v_edge[N+2];
 	int j_first, j_last;
 	j_first = 1;
@@ -196,6 +202,8 @@ double norm(double x[N][N]){
 	int rank, size;
 	MPI_Comm_rank( MPI_COMM_WORLD, &rank );
     MPI_Comm_size( MPI_COMM_WORLD, &size );
+	MPI_Status status;
+
 	double nrmx = 0.0;
 	int j_first, j_last;
 	j_first = 1;
@@ -221,7 +229,6 @@ int main(int argc, char** argv){
 	double u[N][(N/4)+2], v[N][(N/4)+2], du[N][(N/4)+2], dv[N][(N/4)+2];
 	
 	
-	MPI_Status status;
 	MPI_Init( &argc, &argv );
 	
 	FILE *fptr = fopen("nrms.txt", "w");
