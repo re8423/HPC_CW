@@ -204,18 +204,17 @@ double norm(double x[N][N]){
 	return nrmx;
 }
 int rank, size;
-MPI_Status status;
-MPI_Init( &argc, &argv );
-
-MPI_Comm_rank( MPI_COMM_WORLD, &rank );
-MPI_Comm_size( MPI_COMM_WORLD, &size );
 int main(int argc, char** argv){
 	
 	double t = 0.0, nrmu, nrmv, gnrmu, gnrmv;
 	double u[N][(N/4)+2], v[N][(N/4)+2], du[N][(N/4)+2], dv[N][(N/4)+2];
 
 	
-	
+	MPI_Status status;
+	MPI_Init( &argc, &argv );
+
+    MPI_Comm_rank( MPI_COMM_WORLD, &rank );
+    MPI_Comm_size( MPI_COMM_WORLD, &size );
 	
 	FILE *fptr = fopen("nrms.txt", "w");
 	fprintf(fptr, "#t\t\tnrmu\t\tnrmv\n");
