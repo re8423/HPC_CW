@@ -4,6 +4,9 @@
 #include "mpi.h"
 
 void init(double u[N][N], double v[N][N]){
+
+	MPI_Comm_rank( MPI_COMM_WORLD, &rank );
+    MPI_Comm_size( MPI_COMM_WORLD, &size );
 	double uhi, ulo, vhi, vlo;
 	uhi = 0.5; ulo = -0.5; vhi = 0.1; vlo = -0.1;
 
@@ -208,13 +211,10 @@ int main(int argc, char** argv){
 	
 	double t = 0.0, nrmu, nrmv, gnrmu, gnrmv;
 	double u[N][(N/4)+2], v[N][(N/4)+2], du[N][(N/4)+2], dv[N][(N/4)+2];
-
+	
 	
 	MPI_Status status;
 	MPI_Init( &argc, &argv );
-
-    MPI_Comm_rank( MPI_COMM_WORLD, &rank );
-    MPI_Comm_size( MPI_COMM_WORLD, &size );
 	
 	FILE *fptr = fopen("nrms.txt", "w");
 	fprintf(fptr, "#t\t\tnrmu\t\tnrmv\n");
@@ -233,9 +233,9 @@ int main(int argc, char** argv){
 		if (k%m == 0){
 			// calculate the norms
 			nrmu = norm(u);
-			MPI_ALLreduce(&nrmu, &gnrmu, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+			MPI_Allreduce(&nrmu, &gnrmu, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
 			nrmv = norm(v);
-			MPI_ALLreduce(&nrmv, &gnrmv, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+			MPI_Allreduce(&nrmv, &gnrmv, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
 			
 			printf("t = %2.1f\tu-norm = %2.5f\tv-norm = %2.5f\n", t, gnrmu, gnrmv);
 			fprintf(fptr, "%f\t%f\t%f\n", t, gnrmu, gnrmv);
