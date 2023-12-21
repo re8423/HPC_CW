@@ -232,12 +232,14 @@ int main(int argc, char** argv){
 	FILE *fptr = fopen("nrms.txt", "w");
 	fprintf(fptr, "#t\t\tnrmu\t\tnrmv\n");
 
+	MPI_Init( &argc, &argv );
+
 	int rank, size;
 	MPI_Comm_rank( MPI_COMM_WORLD, &rank );
     MPI_Comm_size( MPI_COMM_WORLD, &size );
 	MPI_Status status;
 
-	MPI_Init( &argc, &argv );
+	
 	if (size != 4){	// Hardcoding a four-process decomposition
     	MPI_Abort( MPI_COMM_WORLD, 1 );
 	}
