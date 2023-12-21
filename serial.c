@@ -1,7 +1,7 @@
 #include <stdio.h>				// needed for printing
-#include <stdlib.h>
 #include <math.h>				// needed for tanh, used in init function
 #include "params.h"				// model & simulation parameters
+#include <stdlib.h>
 
 void init(double u[N][N], double v[N][N]){
 	double uhi, ulo, vhi, vlo;
