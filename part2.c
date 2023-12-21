@@ -245,13 +245,9 @@ int main(int argc, char** argv){
     	MPI_Abort( MPI_COMM_WORLD, 1 );
 	}
 	
-	
-	
 	// initialize the state
 	init(u, v);
-	// for(int i =0; i<1000; i++){
-	// 	printf("DJFIOPDJFIOPDSJFIOS");
-	// }
+
 	// time-loop
 	for (int k=0; k < M; k++){
 		// track the time
