@@ -207,12 +207,12 @@ void step(double du[N][(N/4)+2], double dv[N][(N/4)+2], double u[N][(N/4)+2], do
 		for (int j = j_first; j <=j_last; j++){
 			u[i][j] += dt*du[i][j];
 			v[i][j] += dt*dv[i][j];
-			if (rank==0){
-				printf("%d\n", rank);
-				printf("%f\n", u[i][j]);
-				printf("%f\n", v[i][j]);
-				MPI_Abort( MPI_COMM_WORLD, 1 );
-			}
+			// if (rank==0){
+			// 	printf("%d\n", rank);
+			// 	printf("%f\n", u[i][j]);
+			// 	printf("%f\n", v[i][j]);
+			// 	MPI_Abort( MPI_COMM_WORLD, 1 );
+			// }
 			
 		}
 	}
@@ -238,8 +238,10 @@ double norm(double x[N][(N/4)+2]){
 	for (int i = 0; i < N; i++){
 		for (int j = j_first; j <=j_last; j++){
 			nrmx += x[i][j]*x[i][j];
+			if (rank==0){
 			printf("%f\n", nrmx);
 			MPI_Abort( MPI_COMM_WORLD, 1 );
+			}
 		}
 	}
 	return nrmx;
