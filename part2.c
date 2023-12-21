@@ -3,7 +3,7 @@
 #include "params.h"				// model & simulation parameters
 #include "mpi.h"
 
-void init(double u[N][N], double v[N][N]){
+void init(double u[N][(N/4)+2], double v[N][(N/4)+2]){
 	int rank, size;
 	MPI_Comm_rank( MPI_COMM_WORLD, &rank );
     MPI_Comm_size( MPI_COMM_WORLD, &size );
@@ -28,8 +28,8 @@ void init(double u[N][N], double v[N][N]){
 	
 	for (int i=0; i < N; i++){
 		for (int j=j_first; j <= j_last; j++){
-			u[i][j] = ulo + (uhi-ulo)*0.5*(1.0 + tanh((i-N/8)/16.0));
-			v[i][j] = vlo + (vhi-vlo)*0.5*(1.0 + tanh((j-N/8)/16.0));
+			u[i][j] = ulo + (uhi-ulo)*0.5*(1.0 + tanh((i-N/2)/16.0));
+			v[i][j] = vlo + (vhi-vlo)*0.5*(1.0 + tanh((j-N/2)/16.0));
 		}
 	}
 	for(int i =0; i<1000; i++){
@@ -38,7 +38,7 @@ void init(double u[N][N], double v[N][N]){
 
 }
 
-void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
+void dxdt(double du[N][(N/4)+2], double dv[N][(N/4)+2], double u[N][(N/4)+2], double v[N][(N/4)+2]){
 	double lapu, lapv;
 	int up, down, left, right;
 	int rank, size;
@@ -135,7 +135,7 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 	}
 }
 
-void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
+void step(double du[N][(N/4)+2], double dv[N][(N/4)+2], double u[N][(N/4)+2], double v[N][(N/4)+2]){
 	int rank, size;
 	MPI_Comm_rank( MPI_COMM_WORLD, &rank );
     MPI_Comm_size( MPI_COMM_WORLD, &size );
@@ -205,7 +205,7 @@ void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 	}
 }
 
-double norm(double x[N][N]){
+double norm(double x[N][(N/4)+2]){
 	int rank, size;
 	MPI_Comm_rank( MPI_COMM_WORLD, &rank );
     MPI_Comm_size( MPI_COMM_WORLD, &size );
