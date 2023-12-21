@@ -8,6 +8,9 @@ void init(double u[N][N], double v[N][N]){
 	MPI_Comm_rank( MPI_COMM_WORLD, &rank );
     MPI_Comm_size( MPI_COMM_WORLD, &size );
 	MPI_Status status;
+	if (size != 4){	// Hardcoding a four-process decomposition
+    	MPI_Abort( MPI_COMM_WORLD, 1 );
+	}
 
 	double uhi, ulo, vhi, vlo;
 	uhi = 0.5; ulo = -0.5; vhi = 0.1; vlo = -0.1;
