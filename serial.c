@@ -75,6 +75,19 @@ double norm(double x[N][N]){
 			nrmx += x[i][j]*x[i][j];
 			// printf("%f\n", nrmx);
 			// exit(1);
+			if(j==31){
+				printf("%d", 0);
+				printf("%f\n", nrmx);
+			} else if (j==63){
+				printf("%d", 1);
+				printf("%f\n", nrmx);
+			} else if (j==95){
+				printf("%d", 2);
+				printf("%f\n", nrmx);
+			} else if (j==127){
+				printf("%d", 3);
+				printf("%f\n", nrmx);
+			}
 		}
 	}
 	printf("%f\n", nrmx);
