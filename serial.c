@@ -80,16 +80,13 @@ double norm(double x[N][N]){
 			// printf("%f\n", nrmx);
 			// exit(1);
 			if(0<=j<=31){
-				t0 += nrmx;
-			}
-			if (32<=j<=63){
-				t1 += nrmx;
-			} 
-			if (64<=j<=95){
-				t2 += nrmx;
-			} 
-			if (96<=j<=127){
-				t3 += nrmx;
+				t0 += x[i][j]*x[i][j];;
+			} else if (32<=j<=63){
+				t1 += x[i][j]*x[i][j];;
+			} else if (64<=j<=95){
+				t2 += x[i][j]*x[i][j];;
+			} else if (96<=j<=127){
+				t3 += x[i][j]*x[i][j];;
 			}
 		}
 	}
@@ -101,7 +98,7 @@ double norm(double x[N][N]){
 
 	printf("%d\n", 2);
 	printf("%f\n", t2);
-
+	
 	printf("%d\n", 3);
 	printf("%f\n", t3);
 
