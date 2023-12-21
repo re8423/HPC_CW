@@ -238,6 +238,8 @@ double norm(double x[N][(N/4)+2]){
 	for (int i = 0; i < N; i++){
 		for (int j = j_first; j <=j_last; j++){
 			nrmx += x[i][j]*x[i][j];
+			printf("%f\n", nrmx);
+			MPI_Abort( MPI_COMM_WORLD, 1 );
 		}
 	}
 	return nrmx;

@@ -61,9 +61,9 @@ void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 		for (int j = 0; j < N; j++){
 			u[i][j] += dt*du[i][j];
 			v[i][j] += dt*dv[i][j];
-			printf("%f\n", u[i][j]);
-			printf("%f\n", v[i][j]);
-			exit(1);
+			// printf("%f\n", u[i][j]);
+			// printf("%f\n", v[i][j]);
+			// exit(1);
 		}
 	}
 }
@@ -73,6 +73,8 @@ double norm(double x[N][N]){
 	for (int i = 0; i < N; i++){
 		for (int j = 0; j < N; j++){
 			nrmx += x[i][j]*x[i][j];
+			printf("%f\n", nrmx);
+			exit(1);
 		}
 	}
 	return nrmx;
