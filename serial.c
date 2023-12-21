@@ -1,4 +1,5 @@
 #include <stdio.h>				// needed for printing
+#include <stdlib.h>
 #include <math.h>				// needed for tanh, used in init function
 #include "params.h"				// model & simulation parameters
 
