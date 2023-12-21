@@ -51,7 +51,7 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 			printf("%f\n", lapv);
 			printf("%f\n", du[i][j]);
 			printf("%f\n", dv[i][j]);
-			exit();
+			exit(1);
 		}
 	}
 }
