@@ -25,7 +25,7 @@ void init(double u[N][(N/4)+2], double v[N][(N/4)+2]){
 	}
 	
 	for (int i=0; i < N; i++){
-		for (int j=j_first; j <= j_last; j++){
+		for (int j=0; j <= N; j++){
 			u[i][j] = ulo + (uhi-ulo)*0.5*(1.0 + tanh((i-N/2)/16.0));
 			v[i][j] = vlo + (vhi-vlo)*0.5*(1.0 + tanh((j-N/2)/16.0));
 		}
