@@ -241,9 +241,7 @@ int main(int argc, char** argv){
 	
 	// initialize the state
 	init(u, v);
-	for (int i =0; i<1000; i++){
-		printf("DPFJDIPFJAIOFJIAODPJAIOJAIOPJIAOP");
-	}
+
 	// time-loop
 	for (int k=0; k < M; k++){
 		// track the time
