@@ -263,5 +263,6 @@ int main(int argc, char** argv){
 	}
 	
 	fclose(fptr);
+	MPI_Finalize( );
 	return 0;
 }
