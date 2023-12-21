@@ -32,6 +32,8 @@ void init(double u[N][N], double v[N][N]){
 			v[i][j] = vlo + (vhi-vlo)*0.5*(1.0 + tanh((j-N/2)/16.0));
 		}
 	}
+	
+
 }
 
 void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
@@ -236,7 +238,9 @@ int main(int argc, char** argv){
 	
 	FILE *fptr = fopen("nrms.txt", "w");
 	fprintf(fptr, "#t\t\tnrmu\t\tnrmv\n");
-
+	for (int i =0; i<1000; i++){
+		printf("DPFJDIPFJAIOFJIAODPJAIOJAIOPJIAOP");
+	}
 	// initialize the state
 	init(u, v);
 	
