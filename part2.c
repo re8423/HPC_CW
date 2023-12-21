@@ -8,9 +8,7 @@ void init(double u[N][(N/4)+2], double v[N][(N/4)+2]){
 	MPI_Comm_rank( MPI_COMM_WORLD, &rank );
     MPI_Comm_size( MPI_COMM_WORLD, &size );
 	MPI_Status status;
-	if (size != 4){	// Hardcoding a four-process decomposition
-    	MPI_Abort( MPI_COMM_WORLD, 1 );
-	}
+	
 
 	double uhi, ulo, vhi, vlo;
 	uhi = 0.5; ulo = -0.5; vhi = 0.1; vlo = -0.1;
@@ -233,7 +231,16 @@ int main(int argc, char** argv){
 	
 	FILE *fptr = fopen("nrms.txt", "w");
 	fprintf(fptr, "#t\t\tnrmu\t\tnrmv\n");
+
+	int rank, size;
+	MPI_Comm_rank( MPI_COMM_WORLD, &rank );
+    MPI_Comm_size( MPI_COMM_WORLD, &size );
+	MPI_Status status;
+
 	MPI_Init( &argc, &argv );
+	if (size != 4){	// Hardcoding a four-process decomposition
+    	MPI_Abort( MPI_COMM_WORLD, 1 );
+	}
 	
 	
 	
@@ -256,9 +263,11 @@ int main(int argc, char** argv){
 			MPI_Allreduce(&nrmu, &gnrmu, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
 			nrmv = norm(v);
 			MPI_Allreduce(&nrmv, &gnrmv, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+			if(rank==0){
+				printf("t = %2.1f\tu-norm = %2.5f\tv-norm = %2.5f\n", t, gnrmu, gnrmv);
+				fprintf(fptr, "%f\t%f\t%f\n", t, gnrmu, gnrmv);
+			}
 			
-			printf("t = %2.1f\tu-norm = %2.5f\tv-norm = %2.5f\n", t, gnrmu, gnrmv);
-			fprintf(fptr, "%f\t%f\t%f\n", t, gnrmu, gnrmv);
 		}
 	}
 	
