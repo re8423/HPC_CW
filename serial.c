@@ -17,7 +17,7 @@ void dxdt(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 	double lapu, lapv;
 	int up, down, left, right;
 	for (int i = 0; i < N; i++){
-		for (int j = 0; j < N; j++){
+		for (int j = 0; j < N; j++){ 
 			if (i == 0){
 				down = i;
 			}

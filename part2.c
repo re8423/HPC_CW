@@ -17,12 +17,12 @@ void init(double u[N][(N/4)+2], double v[N][(N/4)+2]){
 	int temp = (N/4)*rank;
 	j_first = 1;
 	j_last = N/4;
-	if(rank==0){
-		j_first++;
-	}
-	if(rank==size-1){
-		j_last--;
-	}
+	// if(rank==0){
+	// 	j_first++;
+	// }
+	// if(rank==size-1){
+	// 	j_last--;
+	// }
 	
 	for (int i=0; i < N; i++){
 		for (int j=j_first; j <= j_last; j++){
@@ -46,12 +46,12 @@ void dxdt(double du[N][(N/4)+2], double dv[N][(N/4)+2], double u[N][(N/4)+2], do
 	int j_first, j_last;
 	j_first = 1;
 	j_last = N/4;
-	if(rank==0){
-		j_first++;
-	}
-	if(rank==size-1){
-		j_last--;
-	}
+	// if(rank==0){
+	// 	j_first++;
+	// }
+	// if(rank==size-1){
+	// 	j_last--;
+	// }
 
 	//Send right
 	if(rank<size-1){
@@ -97,7 +97,7 @@ void dxdt(double du[N][(N/4)+2], double dv[N][(N/4)+2], double u[N][(N/4)+2], do
 	}
 
 	for (int i = 0; i < N; i++){
-		for (int j = j_first; j <=j_last; j++){
+		for (int j = j_first; j <=j_last; j++){ //for up and down, no need to do anything, but add edges for left/right
 			if (i == 0){
 				down = i;
 			}
@@ -140,12 +140,12 @@ void step(double du[N][(N/4)+2], double dv[N][(N/4)+2], double u[N][(N/4)+2], do
 	int j_first, j_last;
 	j_first = 1;
 	j_last = N/4;
-	if(rank==0){
-		j_first++;
-	}
-	if(rank==size-1){
-		j_last--;
-	}
+	// if(rank==0){
+	// 	j_first++;
+	// }
+	// if(rank==size-1){
+	// 	j_last--;
+	// }
 
 	//Send right
 	if(rank<size-1){
@@ -210,12 +210,12 @@ double norm(double x[N][(N/4)+2]){
 	int j_first, j_last;
 	j_first = 1;
 	j_last = N/4;
-	if(rank==0){
-		j_first++;
-	}
-	if(rank==size-1){
-		j_last--;
-	}
+	// if(rank==0){
+	// 	j_first++;
+	// }
+	// if(rank==size-1){
+	// 	j_last--;
+	// }
 
 	for (int i = 0; i < N; i++){
 		for (int j = j_first; j <=j_last; j++){
