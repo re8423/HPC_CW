@@ -73,10 +73,12 @@ double norm(double x[N][N]){
 	for (int i = 0; i < N; i++){
 		for (int j = 0; j < N; j++){
 			nrmx += x[i][j]*x[i][j];
-			printf("%f\n", nrmx);
-			exit(1);
+			// printf("%f\n", nrmx);
+			// exit(1);
 		}
 	}
+	printf("%f\n", nrmx);
+	exit(1);
 	return nrmx;
 }
 
