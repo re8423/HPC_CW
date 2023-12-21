@@ -14,7 +14,7 @@ void init(double u[N][(N/4)+2], double v[N][(N/4)+2]){
 	uhi = 0.5; ulo = -0.5; vhi = 0.1; vlo = -0.1;
 
 	int j_first, j_last;
-	int temp = (N/4)*rank;
+
 	j_first = 1;
 	j_last = N/4;
 	if(rank==0){
@@ -27,7 +27,7 @@ void init(double u[N][(N/4)+2], double v[N][(N/4)+2]){
 	for (int i=0; i < N; i++){
 		for (int j=j_first; j <= j_last; j++){
 			u[i][j] = ulo + (uhi-ulo)*0.5*(1.0 + tanh((i-N/2)/16.0));
-			v[i][j] = vlo + (vhi-vlo)*0.5*(1.0 + tanh((j+temp-N/2)/16.0));
+			v[i][j] = vlo + (vhi-vlo)*0.5*(1.0 + tanh((j-N/2)/16.0));
 		}
 	}
 	
