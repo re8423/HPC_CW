@@ -42,7 +42,7 @@ void dxdt(double du[N][(N/4)+2], double dv[N][(N/4)+2], double u[N][(N/4)+2], do
 	MPI_Status status;
 
 
-	double du_edge[N+2], dv_edge[N+2];
+	double u_edge[N+2], v_edge[N+2];
 	int j_first, j_last;
 	j_first = 1;
 	j_last = N/4;
@@ -56,43 +56,43 @@ void dxdt(double du[N][(N/4)+2], double dv[N][(N/4)+2], double u[N][(N/4)+2], do
 	//Send right
 	if(rank<size-1){
 		for(int i=0; i<N; i++){
-			du_edge[i] = du[i][j_last];
-			dv_edge[i] = dv[i][j_last];
+			u_edge[i] = u[i][j_last];
+			v_edge[i] = v[i][j_last];
 		}
 		// printf("Sending column %d from rank %d to rank %d\n", j_last, rank, rank+1);
-		MPI_Send(du_edge, N, MPI_DOUBLE, rank+1, 0, MPI_COMM_WORLD);
-		MPI_Send(dv_edge, N, MPI_DOUBLE, rank+1, 0, MPI_COMM_WORLD);
+		MPI_Send(u_edge, N, MPI_DOUBLE, rank+1, 0, MPI_COMM_WORLD);
+		MPI_Send(v_edge, N, MPI_DOUBLE, rank+1, 0, MPI_COMM_WORLD);
 	}
 
 	//Rec from left
 	if(rank>0){
 		// printf("Recieving column %d from rank %d to rank %d\n", j_first-1, rank-1, rank);
-		MPI_Recv(du_edge, N, MPI_DOUBLE, rank-1, 0, MPI_COMM_WORLD,&status);
-		MPI_Recv(dv_edge, N, MPI_DOUBLE, rank-1, 0, MPI_COMM_WORLD,&status);
+		MPI_Recv(u_edge, N, MPI_DOUBLE, rank-1, 0, MPI_COMM_WORLD,&status);
+		MPI_Recv(v_edge, N, MPI_DOUBLE, rank-1, 0, MPI_COMM_WORLD,&status);
 		for(int i=0; i<N; i++){
-			du[i][j_first-1] = du_edge[i];
-			dv[i][j_first-1] = dv_edge[i];
+			u[i][j_first-1] = u_edge[i];
+			v[i][j_first-1] = v_edge[i];
 		}
 	}
 	//Send left
 	if (rank>0){
 		for(int i=0; i<N; i++){
-			du_edge[i] = du[i][j_first];
-			dv_edge[i] = dv[i][j_first];
+			u_edge[i] = u[i][j_first];
+			v_edge[i] = v[i][j_first];
 		}
 		// printf("Sending column %d from rank %d to rank %d\n", j_first, rank, rank-1);
-		MPI_Send(du_edge, N, MPI_DOUBLE, rank-1, 1, MPI_COMM_WORLD);
-		MPI_Send(dv_edge, N, MPI_DOUBLE, rank-1, 1, MPI_COMM_WORLD);
+		MPI_Send(u_edge, N, MPI_DOUBLE, rank-1, 1, MPI_COMM_WORLD);
+		MPI_Send(v_edge, N, MPI_DOUBLE, rank-1, 1, MPI_COMM_WORLD);
 	}
 
 	//Rec from right
 	if(rank<size-1){
 		// printf("Recieving column %d from rank %d to rank %d\n", j_last+1, rank+1, rank);
-		MPI_Recv( du_edge, N, MPI_DOUBLE, rank + 1, 1, MPI_COMM_WORLD, &status );
-		MPI_Recv( dv_edge, N, MPI_DOUBLE, rank + 1, 1, MPI_COMM_WORLD, &status );
+		MPI_Recv( u_edge, N, MPI_DOUBLE, rank + 1, 1, MPI_COMM_WORLD, &status );
+		MPI_Recv( v_edge, N, MPI_DOUBLE, rank + 1, 1, MPI_COMM_WORLD, &status );
 		for(int i=0; i<N; i++){
-			du[i][j_last+1] = du_edge[i];
-			dv[i][j_last+1] = dv_edge[i];
+			u[i][j_last+1] = u_edge[i];
+			v[i][j_last+1] = v_edge[i];
 		}
 	}
 
