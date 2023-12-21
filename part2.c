@@ -285,8 +285,9 @@ int main(int argc, char** argv){
 		if (k%m == 0){
 			// calculate the norms
 			nrmu = norm(u);
-			MPI_Abort( MPI_COMM_WORLD, 1 );
 			MPI_Allreduce(&nrmu, &gnrmu, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+			printf("%f\n", gnrmu);
+			MPI_Abort( MPI_COMM_WORLD, 1 );
 			nrmv = norm(v);
 			MPI_Allreduce(&nrmv, &gnrmv, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
 			if(rank==0){
