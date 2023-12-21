@@ -2,8 +2,8 @@
 #include <math.h>				// needed for tanh, used in init function
 #include "params.h"				// model & simulation parameters
 #include "mpi.h"
-
-void init(double u[N][(N/4)+2], double v[N][(N/4)+2]){
+int div_size = 4;
+void init(double u[N][(N/div_size)+2], double v[N][(N/div_size)+2]){
 	int rank, size;
 	MPI_Comm_rank( MPI_COMM_WORLD, &rank );
     MPI_Comm_size( MPI_COMM_WORLD, &size );
@@ -14,9 +14,9 @@ void init(double u[N][(N/4)+2], double v[N][(N/4)+2]){
 	uhi = 0.5; ulo = -0.5; vhi = 0.1; vlo = -0.1;
 
 	int j_first, j_last;
-	int temp = (N/4)*rank;
+	int temp = (N/div_size)*rank;
 	j_first = 1;
-	j_last = N/4;
+	j_last = N/div_size;
 	// if(rank==0){
 	// 	j_first++;
 	// }
@@ -33,7 +33,7 @@ void init(double u[N][(N/4)+2], double v[N][(N/4)+2]){
 	
 }
 
-void dxdt(double du[N][(N/4)+2], double dv[N][(N/4)+2], double u[N][(N/4)+2], double v[N][(N/4)+2]){
+void dxdt(double du[N][(N/div_size)+2], double dv[N][(N/div_size)+2], double u[N][(N/div_size)+2], double v[N][(N/div_size)+2]){
 	double lapu, lapv;
 	int up, down, left, right;
 	int rank, size;
@@ -45,7 +45,7 @@ void dxdt(double du[N][(N/4)+2], double dv[N][(N/4)+2], double u[N][(N/4)+2], do
 	double u_edge[N+2], v_edge[N+2];
 	int j_first, j_last;
 	j_first = 1;
-	j_last = N/4;
+	j_last = N/div_size;
 	// if(rank==0){
 	// 	j_first++;
 	// }
@@ -116,7 +116,7 @@ void dxdt(double du[N][(N/4)+2], double dv[N][(N/4)+2], double u[N][(N/4)+2], do
 			else{
 				left = j-1;
 			}
-			if (j == j_last && rank==3){
+			if (j == j_last && rank==size-1){
 				right = j;
 			}
 			else{
@@ -141,7 +141,7 @@ void dxdt(double du[N][(N/4)+2], double dv[N][(N/4)+2], double u[N][(N/4)+2], do
 	}
 }
 
-void step(double du[N][(N/4)+2], double dv[N][(N/4)+2], double u[N][(N/4)+2], double v[N][(N/4)+2]){
+void step(double du[N][(N/div_size)+2], double dv[N][(N/div_size)+2], double u[N][(N/div_size)+2], double v[N][(N/div_size)+2]){
 	int rank, size;
 	MPI_Comm_rank( MPI_COMM_WORLD, &rank );
     MPI_Comm_size( MPI_COMM_WORLD, &size );
@@ -150,7 +150,7 @@ void step(double du[N][(N/4)+2], double dv[N][(N/4)+2], double u[N][(N/4)+2], do
 	// double u_edge[N+2], v_edge[N+2];
 	int j_first, j_last;
 	j_first = 1;
-	j_last = N/4;
+	j_last = N/div_size;
 	// if(rank==0){
 	// 	j_first++;
 	// }
@@ -218,7 +218,7 @@ void step(double du[N][(N/4)+2], double dv[N][(N/4)+2], double u[N][(N/4)+2], do
 	}
 }
 
-double norm(double x[N][(N/4)+2]){
+double norm(double x[N][(N/div_size)+2]){
 	int rank, size;
 	MPI_Comm_rank( MPI_COMM_WORLD, &rank );
     MPI_Comm_size( MPI_COMM_WORLD, &size );
@@ -227,7 +227,7 @@ double norm(double x[N][(N/4)+2]){
 	double nrmx = 0.0;
 	int j_first, j_last;
 	j_first = 1;
-	j_last = N/4;
+	j_last = N/div_size;
 	// if(rank==0){
 	// 	j_first++;
 	// }
@@ -254,7 +254,7 @@ double norm(double x[N][(N/4)+2]){
 int main(int argc, char** argv){
 	
 	double t = 0.0, nrmu, nrmv, gnrmu, gnrmv;
-	double u[N][(N/4)+2], v[N][(N/4)+2], du[N][(N/4)+2], dv[N][(N/4)+2];
+	double u[N][(N/div_size)+2], v[N][(N/div_size)+2], du[N][(N/div_size)+2], dv[N][(N/div_size)+2];
 	
 	FILE *fptr = fopen("nrms.txt", "w");
 	fprintf(fptr, "#t\t\tnrmu\t\tnrmv\n");
@@ -267,7 +267,7 @@ int main(int argc, char** argv){
 	MPI_Status status;
 
 	
-	if (size != 4){	// Hardcoding a four-process decomposition
+	if (size != div_size){	// Hardcoding a four-process decomposition
     	MPI_Abort( MPI_COMM_WORLD, 1 );
 	}
 	
