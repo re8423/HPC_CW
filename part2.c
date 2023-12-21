@@ -4,6 +4,13 @@
 #include "mpi.h"
 
 void init(double u[N][N], double v[N][N]){
+	int rank, size;
+	MPI_Comm_rank( MPI_COMM_WORLD, &rank );
+    MPI_Comm_size( MPI_COMM_WORLD, &size );
+	MPI_Status status;
+	if (size != 4){	// Hardcoding a four-process decomposition
+    	MPI_Abort( MPI_COMM_WORLD, 1 );
+	}
 
 	double uhi, ulo, vhi, vlo;
 	uhi = 0.5; ulo = -0.5; vhi = 0.1; vlo = -0.1;
@@ -18,19 +25,11 @@ void init(double u[N][N], double v[N][N]){
 	if(rank==size-1){
 		j_last--;
 	}
-	int rank, size;
-	MPI_Comm_rank( MPI_COMM_WORLD, &rank );
-    MPI_Comm_size( MPI_COMM_WORLD, &size );
-	MPI_Status status;
-	if (size != 4){	// Hardcoding a four-process decomposition
-    	MPI_Abort( MPI_COMM_WORLD, 1 );
-	}
-
 	
 	for (int i=0; i < N; i++){
 		for (int j=j_first; j <= j_last; j++){
-			u[i][j] = ulo + (uhi-ulo)*0.5*(1.0 + tanh((i-N/2)/16.0));
-			v[i][j] = vlo + (vhi-vlo)*0.5*(1.0 + tanh((j-N/2)/16.0));
+			u[i][j] = ulo + (uhi-ulo)*0.5*(1.0 + tanh((i-N/8)/16.0));
+			v[i][j] = vlo + (vhi-vlo)*0.5*(1.0 + tanh((j-N/8)/16.0));
 		}
 	}
 	for(int i =0; i<1000; i++){
