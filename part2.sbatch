@@ -14,7 +14,7 @@ module purge
 module load gcc openmpi
 
 # compile part2.c into part2
-mpicc -lm part2_copy.c -o part2
+mpicc -lm part2.c -o part2
 
 # run part2 with 4 processes (from #SBATCH -n, above)
 time mpirun ./part2
