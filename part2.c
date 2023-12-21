@@ -233,11 +233,11 @@ int main(int argc, char** argv){
 	double t = 0.0, nrmu, nrmv, gnrmu, gnrmv;
 	double u[N][(N/4)+2], v[N][(N/4)+2], du[N][(N/4)+2], dv[N][(N/4)+2];
 	
-	
-	MPI_Init( &argc, &argv );
-	
 	FILE *fptr = fopen("nrms.txt", "w");
 	fprintf(fptr, "#t\t\tnrmu\t\tnrmv\n");
+	MPI_Init( &argc, &argv );
+	
+	
 	
 	// initialize the state
 	init(u, v);
