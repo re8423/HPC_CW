@@ -4,6 +4,7 @@
         "queue": "c",
         "random": "c",
         "params.h": "c",
-        "atomic": "c"
+        "atomic": "c",
+        "stdio.h": "c"
     }
 }
