@@ -238,12 +238,12 @@ int main(int argc, char** argv){
 	
 	FILE *fptr = fopen("nrms.txt", "w");
 	fprintf(fptr, "#t\t\tnrmu\t\tnrmv\n");
+	
+	// initialize the state
+	init(u, v);
 	for (int i =0; i<1000; i++){
 		printf("DPFJDIPFJAIOFJIAODPJAIOJAIOPJIAOP");
 	}
-	// initialize the state
-	init(u, v);
-	
 	// time-loop
 	for (int k=0; k < M; k++){
 		// track the time
