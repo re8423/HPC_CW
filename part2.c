@@ -127,14 +127,14 @@ void dxdt(double du[N][(N/4)+2], double dv[N][(N/4)+2], double u[N][(N/4)+2], do
 			du[i][j] = DD*lapu + u[i][j]*(1.0 - u[i][j])*(u[i][j]-b) - v[i][j];
 			dv[i][j] = d*DD*lapv + c*(a*u[i][j] - v[i][j]);
 			
-			if (rank==0){
-				printf("%d\n", rank);
-				printf("%f\n", lapu);
-				printf("%f\n", lapv);
-				printf("%f\n", du[i][j]);
-				printf("%f\n", dv[i][j]);
-				MPI_Abort( MPI_COMM_WORLD, 1 );
-			}
+			// if (rank==0){
+			// 	printf("%d\n", rank);
+			// 	printf("%f\n", lapu);
+			// 	printf("%f\n", lapv);
+			// 	printf("%f\n", du[i][j]);
+			// 	printf("%f\n", dv[i][j]);
+			// 	MPI_Abort( MPI_COMM_WORLD, 1 );
+			// }
 			
 
 		}
