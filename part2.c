@@ -116,7 +116,7 @@ void dxdt(double du[N][(N/4)+2], double dv[N][(N/4)+2], double u[N][(N/4)+2], do
 			else{
 				left = j-1;
 			}
-			if (j == j_last-1 && rank==3){
+			if (j == j_last && rank==3){
 				right = j;
 			}
 			else{
