@@ -81,21 +81,27 @@ double norm(double x[N][N]){
 			// exit(1);
 			if(0<=j<=31){
 				t0 += nrmx;
-			} else if (32<=j<=63){
+			}
+			if (32<=j<=63){
 				t1 += nrmx;
-			} else if (64<=j<=95){
+			} 
+			if (64<=j<=95){
 				t2 += nrmx;
-			} else if (96<=j<=127){
+			} 
+			if (96<=j<=127){
 				t3 += nrmx;
 			}
 		}
 	}
 	printf("%d\n", 0);
 	printf("%f\n", t0);
+
 	printf("%d\n", 1);
 	printf("%f\n", t1);
+
 	printf("%d\n", 2);
 	printf("%f\n", t2);
+
 	printf("%d\n", 3);
 	printf("%f\n", t3);
 
