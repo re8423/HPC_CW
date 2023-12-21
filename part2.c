@@ -244,8 +244,8 @@ double norm(double x[N][(N/4)+2]){
 			// }
 		}
 	}
-	printf("%d\n", rank);
-	printf("%f\n", nrmx);
+	// printf("%d\n", rank);
+	// printf("%f\n", nrmx);
 
 
 	return nrmx;
@@ -286,8 +286,8 @@ int main(int argc, char** argv){
 			// calculate the norms
 			nrmu = norm(u);
 			MPI_Allreduce(&nrmu, &gnrmu, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
-			printf("%f\n", gnrmu);
-			MPI_Abort( MPI_COMM_WORLD, 1 );
+			// printf("%f\n", gnrmu);
+			// MPI_Abort( MPI_COMM_WORLD, 1 );
 			nrmv = norm(v);
 			MPI_Allreduce(&nrmv, &gnrmv, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
 			if(rank==0){

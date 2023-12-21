@@ -70,41 +70,41 @@ void step(double du[N][N], double dv[N][N], double u[N][N], double v[N][N]){
 
 double norm(double x[N][N]){
 	double nrmx = 0.0;
-	double t0 = 0.0;
-	double t1 = 0.0;
-	double t2 = 0.0;
-	double t3 = 0.0;
+	// double t0 = 0.0;
+	// double t1 = 0.0;
+	// double t2 = 0.0;
+	// double t3 = 0.0;
 	for (int i = 0; i < N; i++){
 		for (int j = 0; j < N; j++){
 			nrmx += x[i][j]*x[i][j];
 			// printf("%f\n", nrmx);
 			// exit(1);
-			if(0<=j && j<32){
-				t0 += x[i][j]*x[i][j];;
-			} else if (32<=j && j<64){
-				t1 += x[i][j]*x[i][j];;
-			} else if (64<=j && j<96){
-				t2 += x[i][j]*x[i][j];;
-			} else if (96<=j && j<128){
-				t3 += x[i][j]*x[i][j];;
-			}
+			// if(0<=j && j<32){
+			// 	t0 += x[i][j]*x[i][j];;
+			// } else if (32<=j && j<64){
+			// 	t1 += x[i][j]*x[i][j];;
+			// } else if (64<=j && j<96){
+			// 	t2 += x[i][j]*x[i][j];;
+			// } else if (96<=j && j<128){
+			// 	t3 += x[i][j]*x[i][j];;
+			// }
 		}
 	}
-	printf("%d\n", 0);
-	printf("%f\n", t0);
+	// printf("%d\n", 0);
+	// printf("%f\n", t0);
 
-	printf("%d\n", 1);
-	printf("%f\n", t1);
+	// printf("%d\n", 1);
+	// printf("%f\n", t1);
 
-	printf("%d\n", 2);
-	printf("%f\n", t2);
+	// printf("%d\n", 2);
+	// printf("%f\n", t2);
 	
-	printf("%d\n", 3);
-	printf("%f\n", t3);
+	// printf("%d\n", 3);
+	// printf("%f\n", t3);
 
 
-	printf("%f\n", nrmx);
-	exit(1);
+	// printf("%f\n", nrmx);
+	// exit(1);
 	return nrmx;
 }
 
