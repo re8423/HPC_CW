@@ -2,7 +2,7 @@
 #include <math.h>				// needed for tanh, used in init function
 #include "params.h"				// model & simulation parameters
 #include "mpi.h"
-int div_size = 1;
+int div_size = 4;
 void init(double u[N][(N/div_size)+2], double v[N][(N/div_size)+2]){
 	int rank, size;
 	MPI_Comm_rank( MPI_COMM_WORLD, &rank );
